@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<drawing>
+    <rect color="red" x0="10.0" x1="200.0" y0="10.0" y1="120.0"/>
+    <line color="blue" x0="10.0" x1="200.0" y0="10.0" y1="120.0"/>
+    <elli color="black" rx="12.0" ry="12.0" x="10.0" y="10.0"/>
+    <circ color="green" cx="14.0" cy="14.0" rad="200.0"/>
+</drawing>
