@@ -1,3 +1,7 @@
 .idea
 target
 dessin.vec
+doc/rapport.aux
+doc/rapport.log
+doc/rapport.toc
+doc/rapport.synctex.gz

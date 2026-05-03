@@ -1,1 +1,0 @@
-L'utilisation du pattern strategy m'a traversé l'esprit pour les différentes couleurs (bleu, rouge, etc…) mais une simple fabrique ou un enum suffit, ce serait "overkill d'utiliser le pattern strategy dans notre cas. Néanmoins le pattern serait plus pertinent si on ajoutait plusieurs palettes, thèmes.

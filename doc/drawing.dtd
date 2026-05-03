@@ -1,0 +1,48 @@
+<!--
+  DTD for the drawing exchange XML format (save / load).
+  Matches XmlVisitor and XmlLoader (element names and required attributes).
+  Color names in files: red, blue, black, white, green, yellow.
+-->
+<!ENTITY % forme "rect | circ | line | elli | group">
+
+<!ELEMENT drawing (%forme;)*>
+<!ELEMENT group (%forme;)*>
+
+<!ELEMENT rect EMPTY>
+<!ATTLIST rect
+    x0    CDATA #REQUIRED
+    y0    CDATA #REQUIRED
+    x1    CDATA #REQUIRED
+    y1    CDATA #REQUIRED
+    color CDATA #REQUIRED
+>
+
+<!ELEMENT circ EMPTY>
+<!ATTLIST circ
+    cx    CDATA #REQUIRED
+    cy    CDATA #REQUIRED
+    rad   CDATA #REQUIRED
+    color CDATA #REQUIRED
+>
+
+<!ELEMENT line EMPTY>
+<!ATTLIST line
+    x0    CDATA #REQUIRED
+    y0    CDATA #REQUIRED
+    x1    CDATA #REQUIRED
+    y1    CDATA #REQUIRED
+    color CDATA #REQUIRED
+>
+
+<!ELEMENT elli EMPTY>
+<!ATTLIST elli
+    x     CDATA #REQUIRED
+    y     CDATA #REQUIRED
+    rx    CDATA #REQUIRED
+    ry    CDATA #REQUIRED
+    color CDATA #REQUIRED
+>
+
+<!ATTLIST group
+    label CDATA #REQUIRED
+>

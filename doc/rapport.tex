@@ -1,0 +1,416 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage[hidelinks]{hyperref}
+
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=single,
+    tabsize=2,
+    columns=fullflexible
+}
+
+\title{Outils de dessin vectoriel}
+\author{Florian Pépin}
+\date{\today}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{1.5cm}
+
+    \includegraphics[width=0.42\textwidth]{images/logo.jpg}
+
+    \vspace{2.5cm}
+
+    {\Huge\bfseries Outils de dessin vectoriel\par}
+
+    \vspace{1.2cm}
+
+    {\LARGE Rapport de projet\par}
+
+    \vfill
+
+    {\large
+    Florian Pépin\\
+    \vspace{0.8cm}
+    \today\par}
+
+    \vspace*{2cm}
+\end{titlepage}
+
+\tableofcontents
+
+\newpage
+
+\section{Patron de conception command}
+
+\subsection{Motivation}
+
+L'application reçoit des commandes via un CLI (Command Line Interface). Le patron Commande permet d'encapsuler chaque action dans un objet indépendant, ce qui rend l'ajout de nouvelles commandes propres et élégant.
+
+\subsection{Correspondance des acteurs}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.34\textwidth}|p{0.54\textwidth}|}
+\hline
+\textbf{Acteur du pattern} & \textbf{Entité dans l'application} \\
+\hline
+Client & \texttt{App} \\
+\hline
+Command & \texttt{EditorCommand} \\
+\hline
+ConcreteCommand & \texttt{RectCommand}, \texttt{CircCommand}, \texttt{SaveCommand}, etc. \\
+\hline
+Invoker & \texttt{Editor} \\
+\hline
+Receiver & \texttt{DrawingModel} (via \texttt{EditorContext}) \\
+\hline
+\end{tabular}
+
+\begin{center}
+\includegraphics[width=1\textwidth]{images/UML/command.jpg}
+\end{center}
+
+\newpage
+
+\section{Patron de conception observateur}
+
+\subsection{Motivation}
+
+Lorsque l'historique des formes change, la fenêtre graphique doit se mettre à jour sans que chaque commande connaisse la vue. Sans le patron Observateur, les commandes appelleraient directement \texttt{GraphicViewer}. Grâce à ce patron, \texttt{DrawingModel} notifie les observateurs après chaque changement (\texttt{fireChange}), et \texttt{GraphicViewer} réagit en repeignant le canvas : le modèle reste la source de vérité, la vue reste synchronisée automatiquement.
+
+\subsection{Correspondance des acteurs}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.34\textwidth}|p{0.54\textwidth}|}
+\hline
+\textbf{Acteur du pattern} & \textbf{Entité dans l'application} \\
+\hline
+Subject & \texttt{ListenableModel} \\
+\hline
+ConcreteSubject & \texttt{DrawingModel} \\
+\hline
+Observer & \texttt{ModelListener} \\
+\hline
+ConcreteObserver & \texttt{GraphicViewer} \\
+\hline
+\end{tabular}
+
+\begin{center}
+\includegraphics[width=1\textwidth]{images/UML/observer.jpg}
+\end{center}
+
+\newpage
+
+\section{Patron de conception visiteur et composite}
+
+\subsection{Composite : motivation}
+
+L'application permet de regrouper des formes en groupes, eux-mêmes pouvant contenir d'autres groupes. Le Composite permet de traiter de la même manière les formes simples et les groupes.
+
+\subsection{Composite : correspondance des acteurs}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.34\textwidth}|p{0.54\textwidth}|}
+\hline
+\textbf{Acteur du pattern} & \textbf{Entité dans l'application} \\
+\hline
+Component & \texttt{Drawable} \\
+\hline
+Leaf & \texttt{Rectangle}, \texttt{Circle}, \texttt{Line}, \texttt{Ellipse} \\
+\hline
+Composite & \texttt{Group} \\
+\hline
+Client & \texttt{DrawingModel}, \texttt{XmlVisitor}, \texttt{GraphicViewer} \\
+\hline
+\end{tabular}
+
+\subsection{Visiteur : motivation}
+
+Le modèle contient différentes formes (\texttt{Rectangle}, \texttt{Circle}, \texttt{Line}, \texttt{Ellipse}, \texttt{Group}). Sans le patron Visiteur, ajouter une opération comme le rendu ou la sauvegarde XML aurait nécessité de modifier chaque classe de forme, violant le principe Ouvert/Fermé. Le Visiteur permet d'ajouter des opérations sans toucher au modèle.
+
+\subsection{Visiteur : correspondance des acteurs}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.34\textwidth}|p{0.54\textwidth}|}
+\hline
+\textbf{Acteur du pattern} & \textbf{Entité dans l'application} \\
+\hline
+Visitor & \texttt{DrawingVisitor} \\
+\hline
+ConcreteVisitor & \texttt{GraphicViewer}, \texttt{XmlVisitor} \\
+\hline
+Element & \texttt{Drawable} \\
+\hline
+ConcreteElement & \texttt{Rectangle}, \texttt{Circle}, \texttt{Line}, \texttt{Ellipse}, \texttt{Group} \\
+\hline
+ObjectStructure & \texttt{DrawingModel} \\
+\hline
+\end{tabular}
+
+\begin{center}
+\includegraphics[width=1\textwidth]{images/UML/composite-visitor-drawable.jpg}
+\end{center}
+
+\newpage
+
+\section{Patron de conception chaîne de responsabilité}
+
+\subsection{Motivation}
+
+Les commandes CLI (Command Line Interface) reçoivent des arguments sous forme de \texttt{String[]}. Il faut valider l'arité (le nombre d'arguments de la commande), le type des arguments (\texttt{double}, couleur) avant de construire la commande. Sans ce patron, chaque commande aurait géré sa propre validation. 
+
+\subsection{Correspondance des acteurs}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.34\textwidth}|p{0.54\textwidth}|}
+\hline
+\textbf{Acteur du pattern} & \textbf{Entité dans l'application} \\
+\hline
+Handler & \texttt{Validator} \\
+\hline
+AbstractHandler & \texttt{ArgsValidator} \\
+\hline
+ConcreteHandler & \texttt{ArityValidator}, \texttt{MinArityValidator}, \texttt{DoubleValidator}, \texttt{ColorValidator} \\
+\hline
+Client & \texttt{CommandRegistry} \\
+\hline
+\end{tabular}
+
+\begin{center}
+\includegraphics[width=1\textwidth]{images/UML/chains-of-responsability.jpg}
+\end{center}
+
+\newpage
+
+\section{Patrons de conception écartés}
+
+J'ai hésité à utiliser quatre patrons de conception que j'ai finalement retiré.\\
+
+Le pattern Strategy a été envisagé pour les différentes couleurs (bleu, rouge, etc.) mais finalement ce serait \emph{overkill} d'utiliser ce pattern dans notre cas puisque je n'ai pas de système très poussé avec différents thèmes par exemple.\\\\
+
+Le pattern Builder a été envisagé également pour la construction des commandes. J'aurais pu créer un Builder par commande, mais cela aurait engendré une explosion de classes sans valeur architecturale. Un Builder par famille de commandes aurait également été envisageable, mais cela violerait le principe de responsabilité unique en construisant par exemple un rectangle et un cercle dans le même Builder. J'ai donc opté pour la Chain of Responsibility pour la validation des arguments, combinée à la CommandFactory avec lambda pour la construction.\\
+Ce patron n'ayant pas été abordé en cours, je me suis appuyé sur la littérature disponible pour guider mes choix architecturaux.\\\\
+
+Le pattern Factory Method a été aussi envisagé pour être appliquée dans CommandRegistry via une méthode createCommand(). Cependant ce comportement est déjà assuré par la CommandFactory sous forme de lambda. Je trouve cela plus concis et cela ne nécessite pas de sous-classes de CommandRegistry.\\\\
+
+L'Abstract Factory a aussi été envisagé pour créer des familles de commandes selon le profil de l'éditeur : Ce patron aurait été particulièrement pertinent si l'application devait supporter plusieurs profils d'éditeurs avec des fonctionnalités différentes (basic, premium, etc...). Cependant, l'application n'étant pas amenée à évoluer dans ce sens dans, ce patron aurait introduit une complexité non justifiée par les besoins actuels.\\
+
+\newpage
+
+\section{DTD XML}
+
+\lstinputlisting{drawing.dtd}
+
+\newpage
+
+\section{Bilan concernant les principes d'architecture vus en cours}
+
+L'application adopte une architecture MVC (Modèle - Vue - Controleur).\\
+Cette architecture applique une séparation des responsabilités avec le modèle (\texttt{DrawingModel}, formes et groupe) qui concentre l'état et les règles métier.\\
+Les différents contrôleurs (\texttt{Editor}, commandes, registre et validation) orchestre les entrées utilisateur sans implémenter le rendu ni la persistance XML.\\
+La vue (\texttt{GraphicViewer}) ne fait qu'afficher et réagit aux changements via le pattern Observeur.\\\\
+
+Le principe de responsabilité unique se lit dans le découpage des commandes (\texttt{EditorCommand} et sous-classes), des validateurs de la chaîne de responsabilité et des visiteurs (\texttt{XmlVisitor}, \texttt{GraphicViewer}).\\
+Le principe ouvert/fermé se retrouve notamment via le Visiteur et le Composite puisqu'ajouter une opération sur les formes (export, affichage) revient à écrire un nouveau visiteur sans modifier les classes de formes.\\
+L'inversion de dépendances apparaît lorsque le contrôle et la fabrique s'appuient sur des abstractions (\texttt{EditorCommand}, \texttt{Validator}, \texttt{Drawable}) plutôt que sur des implémentations figées.\\\\
+
+\newpage
+
+\appendix
+
+\section{Inventaire des entités par paquetage}
+
+Liste des types publics (classes et interfaces) de l'application, regroupés par paquetage ; la colonne \emph{Rôle} résume en une phrase la responsabilité de chaque entité.
+
+\subsection{\protect\texttt{com.drawing.controller.command}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{EditorCommand} & Contrat d'une action invocable par l'éditeur avec retour d'un message pour la console. \\
+\hline
+\texttt{CircCommand} & Ajoute un cercle au modèle à partir des coordonnées et de la couleur fournies en arguments. \\
+\hline
+\texttt{ElliCommand} & Ajoute une ellipse au modèle à partir du centre, des demi-axes et de la couleur. \\
+\hline
+\texttt{GrpCommand} & Regroupe les formes désignées par leurs indices dans un groupe nommé. \\
+\hline
+\texttt{LineCommand} & Ajoute un segment au modèle entre deux points avec une couleur. \\
+\hline
+\texttt{ListCommand} & Retourne la représentation texte numérotée de l'historique des formes du modèle. \\
+\hline
+\texttt{LoadCommand} & Réinitialise le modèle puis le remplit en lisant un fichier XML conforme au format d'échange. \\
+\hline
+\texttt{NewCommand} & Vide l'historique du modèle pour repartir d'un dessin vierge. \\
+\hline
+\texttt{QuitCommand} & Demande la fermeture de la fenêtre graphique principale. \\
+\hline
+\texttt{RectCommand} & Ajoute un rectangle au modèle à partir de deux coins opposés et d'une couleur. \\
+\hline
+\texttt{SaveCommand} & Exporte tout l'historique du modèle vers un fichier XML via le visiteur XML. \\
+\hline
+\texttt{HelpCommand} & Retourne le texte d'aide listant la syntaxe des commandes disponibles. \\
+\hline
+\texttt{UgrpCommand} & Dissout le groupe situé au rang affiché par \texttt{list} lorsque cet élément est bien un groupe. \\
+\hline
+\end{tabular}
+
+\subsection{\protect\texttt{com.drawing.controller.commandset}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{CommandSet} & Contrat d'enregistrement d'un groupe cohérent de commandes dans le registre global. \\
+\hline
+\texttt{DrawingCommandSet} & Enregistre les commandes de création de primitives (\texttt{rect}, \texttt{circ}, \texttt{line}, \texttt{elli}). \\
+\hline
+\texttt{FileCommandSet} & Enregistre les commandes de persistance (\texttt{save}, \texttt{load}). \\
+\hline
+\texttt{GroupCommandSet} & Enregistre les commandes de groupement (\texttt{grp}, \texttt{ugrp}). \\
+\hline
+\texttt{SystemCommandSet} & Enregistre les commandes générales (\texttt{new}, \texttt{list}, \texttt{quit}, \texttt{help}). \\
+\hline
+\end{tabular}
+
+\subsection{\protect\texttt{com.drawing.controller.registry}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{CommandFactory} & Fabrique une instance de \texttt{EditorCommand} à partir des arguments déjà validés. \\
+\hline
+\texttt{CommandRegistry} & Associe chaque verbe à une fabrique qui valide les arguments puis crée la commande correspondante. \\
+\hline
+\end{tabular}
+
+\subsection{\protect\texttt{com.drawing.controller.registry.validation}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{Validator} & Contrat d'un maillon de validation des arguments de ligne de commande. \\
+\hline
+\texttt{ArgsValidator} & Exécute un contrôle local puis enchaîne éventuellement le validateur suivant dans la chaîne. \\
+\hline
+\texttt{ArityValidator} & Vérifie que le nombre d'arguments est exactement celui attendu pour la commande. \\
+\hline
+\texttt{MinArityValidator} & Vérifie qu'au moins le nombre minimal requis d'arguments est présent. \\
+\hline
+\texttt{DoubleValidator} & Vérifie que les arguments aux indices donnés sont des nombres décimaux syntaxiquement valides. \\
+\hline
+\texttt{ColorValidator} & Vérifie que les arguments aux indices donnés sont des noms de couleur reconnus par l'application. \\
+\hline
+\end{tabular}
+
+\subsection{\protect\texttt{com.drawing.controller.xml}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{XmlLoader} & Parse un fichier XML et recrée les formes dans le modèle en appelant ses méthodes de création. \\
+\hline
+\texttt{XmlVisitor} & Parcourt les \texttt{Drawable} du modèle pour construire un arbre DOM XML prêt à être enregistré sur disque. \\
+\hline
+\end{tabular}
+
+\subsection{\protect\texttt{com.drawing.error}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{InvalidArgException} & Exception levée lorsqu'un argument de commande ou de validation est refusé. \\
+\hline
+\end{tabular}
+
+\subsection{\protect\texttt{com.drawing.model}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{DrawingModel} & Détient l'historique des formes, applique créations et groupements, et notifie les observateurs à chaque changement. \\
+\hline
+\end{tabular}
+
+\subsection{\protect\texttt{com.drawing.model.shape}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{Drawable} & Contrat d'une forme géométrique du modèle acceptant un \texttt{DrawingVisitor}. \\
+\hline
+\texttt{DrawingVisitor} & Contrat des opérations spécifiques à chaque type de forme (patron Visitor). \\
+\hline
+\texttt{Line} & Modélise un segment entre deux points avec une couleur. \\
+\hline
+\texttt{Rectangle} & Modélise un rectangle aligné sur les axes défini par deux coins opposés et une couleur. \\
+\hline
+\texttt{Circle} & Modélise un cercle par centre, rayon et couleur. \\
+\hline
+\texttt{Ellipse} & Modélise une ellipse par centre, demi-axes et couleur. \\
+\hline
+\texttt{Group} & Modélise un composite regroupant plusieurs \texttt{Drawable} sous un nom. \\
+\hline
+\end{tabular}
+
+\subsection{\protect\texttt{com.drawing.util}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{ListenableModel} & Contrat d'un modèle pouvant enregistrer et retirer des observateurs sur ses changements. \\
+\hline
+\texttt{ModelListener} & Contrat d'un observateur appelé après une mutation du modèle. \\
+\hline
+\texttt{AbstractList\-enable\-Model} & Fournit la liste d'observateurs et la notification \texttt{fireChange} aux modèles dérivés. \\
+\hline
+\texttt{ColorDecode} & Traduit les noms de couleur texte en \texttt{Color} et inversement pour la console et l'XML. \\
+\hline
+\end{tabular}
+
+\subsection{\protect\texttt{com.drawing.view}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{GraphicViewer} & Fenêtre Swing qui dessine l'historique du modèle et se met à jour lorsque le modèle notifie un changement. \\
+\hline
+\end{tabular}
+
+\subsection{\protect\texttt{com.drawing}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{App} & Point d'entrée \texttt{main} : instancie le modèle, la vue, le registre de commandes et lance la boucle de l'éditeur en console. \\
+\hline
+\end{tabular}
+
+\subsection{\protect\texttt{com.drawing.controller}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{Editor} & Lit les lignes saisies, dispatche le verbe vers le registre et affiche le message renvoyé par la commande exécutée. \\
+\hline
+\texttt{EditorContext} & Regroupe les références partagées (modèle de dessin et fenêtre graphique) passées à chaque commande. \\
+\hline
+\end{tabular}
+
+\end{document}
