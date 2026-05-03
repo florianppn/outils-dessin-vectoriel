@@ -28,6 +28,6 @@ java -jar target/outils-dessin-vectoriel-1.0.jar
 mvn javadoc:javadoc
 ```
 
-La documentation HTML est produite dans le dossier `javadoc/` (ouvrir `javadoc/index.html` dans un navigateur).
+La documentation HTML est produite dans le dossier `javadoc/` (ouvrir `javadoc/apidocs/index.html` dans un navigateur).
 
 Le rapport du projet se trouve dans `doc/rapport.tex`.
