@@ -21,10 +21,10 @@ public class DrawingModel extends AbstractListenableModel {
     private List<Drawable> history = new ArrayList<>();
 
     /**
-     * @return vue non modifiable de l'historique (ordre d'affichage / d'énumération)
+     * @return copie de l'historique (ordre d'affichage / d'énumération)
      */
     public List<Drawable> getHistory() {
-        return Collections.unmodifiableList(history);
+        return new ArrayList<>(history);
     }
 
     /**
@@ -137,7 +137,7 @@ public class DrawingModel extends AbstractListenableModel {
     public String toString() {
         StringBuilder res = new StringBuilder();
         for(int i = 0; i < history.size(); i++) {
-            res.append(i+1).append(" ").append(history.get(i).toString()).append("\n");
+            res.append(i + 1).append(" ").append(history.get(i).toString()).append("\n");
         }
         return res.toString();
     }

@@ -25,7 +25,7 @@ public class DrawingCommandSet implements CommandSet {
                 RectCommand::new
         );
         registry.register("circ",
-                new ArityValidator(new DoubleValidator(new ColorValidator(4), 0, 1, 2, 3),5),
+                new ArityValidator(new DoubleValidator(new ColorValidator(3), 0, 1, 2), 4),
                 CircCommand::new
         );
         registry.register("line",
