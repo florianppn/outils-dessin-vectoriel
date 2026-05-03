@@ -10,14 +10,30 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 
+/**
+ * Lit un fichier XML de dessin et recrée les formes dans un {@link DrawingModel}
+ * via les méthodes {@code create*} (notifications incluses).
+ *
+ * @author Florian Pépin
+ * @version 1.0
+ */
 public class XmlLoader {
 
     private DrawingModel model;
-    
+
+    /**
+     * @param model modèle cible (déjà éventuellement vidé par la commande appelante)
+     */
     public XmlLoader(DrawingModel model) {
         this.model = model;
     }
-    
+
+    /**
+     * Parse le document XML et ajoute les formes au modèle.
+     *
+     * @param fileName chemin du fichier XML sur le disque
+     * @throws Exception erreur d'accès fichier, parse XML ou attributs invalides
+     */
     public void load(String fileName) throws Exception {
         Document doc = DocumentBuilderFactory.newInstance()
                 .newDocumentBuilder()
@@ -25,13 +41,13 @@ public class XmlLoader {
         Element root = doc.getDocumentElement();
         parseChildren(root);
     }
-    
+
     private void parseChildren(Element parent) {
         NodeList children = parent.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             Node node = children.item(i);
             if (node.getNodeType() != Node.ELEMENT_NODE) continue;
-            
+
             Element e = (Element) node;
             switch (e.getTagName()) {
                 case "rect" -> model.createRectangle(
@@ -65,19 +81,18 @@ public class XmlLoader {
             }
         }
     }
-    
+
     private void parseGroup(Element groupEl) {
         String label = groupEl.getAttribute("label");
-        // récupère les ranks des enfants après création
         int startIndex = model.getHistory().size();
-        parseChildren(groupEl); // crée les enfants d'abord
+        parseChildren(groupEl);
         int endIndex = model.getHistory().size();
-        
+
         int[] ranks = new int[endIndex - startIndex];
         for (int i = 0; i < ranks.length; i++) {
             ranks[i] = startIndex + i;
         }
         model.createGroup(label, ranks);
     }
-    
+
 }

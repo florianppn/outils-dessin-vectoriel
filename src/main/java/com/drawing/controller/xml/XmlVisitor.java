@@ -14,11 +14,22 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import java.io.File;
 
+/**
+ * Visiteur qui construit un arbre DOM XML à partir des {@link Drawable} du modèle.
+ *
+ * @author Florian Pépin
+ * @version 1.0
+ */
 public class XmlVisitor implements DrawingVisitor {
 
     private Document doc;
     private Element current;
-    
+
+    /**
+     * Initialise un document vide avec l'élément racine {@code drawing}.
+     *
+     * @throws ParserConfigurationException si la fabrique de parseur XML ne peut pas être créée
+     */
     public XmlVisitor() throws ParserConfigurationException {
         doc = DocumentBuilderFactory.newInstance()
                 .newDocumentBuilder()
@@ -27,7 +38,10 @@ public class XmlVisitor implements DrawingVisitor {
         doc.appendChild(root);
         current = root;
     }
-    
+
+    /**
+     * @param r rectangle à sérialiser sous la forme {@code <rect .../>}
+     */
     @Override
     public void visit(Rectangle r) {
         Element e = doc.createElement("rect");
@@ -38,7 +52,10 @@ public class XmlVisitor implements DrawingVisitor {
         e.setAttribute("color", ColorDecode.getName(r.getColor()));
         current.appendChild(e);
     }
-    
+
+    /**
+     * @param c cercle à sérialiser sous la forme {@code <circ .../>}
+     */
     @Override
     public void visit(Circle c) {
         Element e = doc.createElement("circ");
@@ -49,6 +66,9 @@ public class XmlVisitor implements DrawingVisitor {
         current.appendChild(e);
     }
 
+    /**
+     * @param l ligne à sérialiser sous la forme {@code <line .../>}
+     */
     @Override
     public void visit(Line l) {
         Element e = doc.createElement("line");
@@ -60,6 +80,9 @@ public class XmlVisitor implements DrawingVisitor {
         current.appendChild(e);
     }
 
+    /**
+     * @param ell ellipse à sérialiser sous la forme {@code <elli .../>}
+     */
     @Override
     public void visit(Ellipse ell) {
         Element e = doc.createElement("elli");
@@ -70,13 +93,16 @@ public class XmlVisitor implements DrawingVisitor {
         e.setAttribute("color", ColorDecode.getName(ell.getColor()));
         current.appendChild(e);
     }
-    
+
+    /**
+     * @param g groupe à sérialiser ; les enfants sont imbriqués sous {@code <group>}.
+     */
     @Override
     public void visit(Group g) {
         Element groupEl = doc.createElement("group");
         groupEl.setAttribute("label", g.getName());
         current.appendChild(groupEl);
-        
+
         Element previous = current;
         current = groupEl;
         for (Drawable d : g.getDrawables()) {
@@ -84,7 +110,13 @@ public class XmlVisitor implements DrawingVisitor {
         }
         current = previous;
     }
-    
+
+    /**
+     * Écrit le document DOM construit dans un fichier.
+     *
+     * @param fileName chemin du fichier de sortie
+     * @throws Exception erreur de transformation ou d'écriture disque
+     */
     public void save(String fileName) throws Exception {
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");

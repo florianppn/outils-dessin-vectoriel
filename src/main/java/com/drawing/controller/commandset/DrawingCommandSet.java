@@ -9,32 +9,31 @@ import com.drawing.controller.registry.validation.ArityValidator;
 import com.drawing.controller.registry.validation.ColorValidator;
 import com.drawing.controller.registry.validation.DoubleValidator;
 
+/**
+ * Commandes de création de primitives : {@code rect}, {@code circ}, {@code line}, {@code elli}.
+ *
+ * @author Florian Pépin
+ * @version 1.0
+ */
 public class DrawingCommandSet implements CommandSet {
 
+    /** {@inheritDoc} */
     @Override
     public void register(CommandRegistry registry) {
         registry.register("rect",
-                new ArityValidator(5)
-                  .then(new DoubleValidator(0, 1, 2, 3))
-                  .then(new ColorValidator(4)),
+                new ArityValidator(new DoubleValidator(new ColorValidator(4), 0, 1, 2, 3),5),
                 RectCommand::new
         );
         registry.register("circ",
-                new ArityValidator(5)
-                  .then(new DoubleValidator(0, 1, 2, 3))
-                  .then(new ColorValidator(4)),
+                new ArityValidator(new DoubleValidator(new ColorValidator(4), 0, 1, 2, 3),5),
                 CircCommand::new
         );
         registry.register("line",
-                new ArityValidator(5)
-                  .then(new DoubleValidator(0, 1, 2, 3))
-                   .then(new ColorValidator(4)),
+                new ArityValidator(new DoubleValidator(new ColorValidator(4), 0, 1, 2, 3), 5),
                 LineCommand::new
         );
         registry.register("elli",
-                new ArityValidator(5)
-                  .then(new DoubleValidator(0, 1, 2, 3))
-                  .then(new ColorValidator(4)),
+                new ArityValidator(new DoubleValidator(new ColorValidator(4), 0, 1, 2, 3), 5),
                 ElliCommand::new
         );
     }

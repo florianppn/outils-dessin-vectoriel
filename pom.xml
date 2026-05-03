@@ -35,6 +35,23 @@
                     <mainClass>com.drawing.App</mainClass>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <reportOutputDirectory>${project.basedir}/javadoc</reportOutputDirectory>
+                    <source>${maven.compiler.source}</source>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <docencoding>${project.build.sourceEncoding}</docencoding>
+                    <charset>${project.build.sourceEncoding}</charset>
+                    <windowtitle>Outils dessin vectoriel</windowtitle>
+                    <doctitle>Outils dessin vectoriel ${project.version}</doctitle>
+                    <show>protected</show>
+                    <!-- évite l'échec du build sur des avertissements doclint (HTML, tags manquants, etc.) -->
+                    <doclint>none</doclint>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
