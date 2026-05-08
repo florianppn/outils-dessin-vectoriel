@@ -22,6 +22,16 @@ public class Group implements Drawable {
     }
 
     /**
+     * Surcharge du constructeur pour initialiser le groupe avec une liste d'enfants.
+     * @param drawables enfants du groupe
+     * @param name libellé du groupe (affichage / XML)
+     */
+    public Group(List<Drawable> drawables, String name) {
+        this.drawables = drawables;
+        this.name = name;
+    }
+
+    /**
      * @return liste modifiable des enfants (à manipuler avec prudence depuis l'extérieur)
      */
     public List<Drawable> getDrawables() {

@@ -23,6 +23,11 @@ public class Editor {
         this.ctx = ctx;
     }
 
+    public Editor() {
+        this.commands = new HashMap<>();
+        this.ctx = null;
+    }
+
     /**
      * Lance la boucle de lecture jusqu'à fermeture du flux d'entrée.
      */
