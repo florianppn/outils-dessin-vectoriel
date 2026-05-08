@@ -84,9 +84,9 @@ public class XmlLoader {
 
     private void parseGroup(Element groupEl) {
         String label = groupEl.getAttribute("label");
-        int startIndex = model.getHistory().size();
+        int startIndex = model.getDrawables().size();
         parseChildren(groupEl);
-        int endIndex = model.getHistory().size();
+        int endIndex = model.getDrawables().size();
 
         int[] ranks = new int[endIndex - startIndex];
         for (int i = 0; i < ranks.length; i++) {

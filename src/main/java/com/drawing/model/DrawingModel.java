@@ -6,7 +6,6 @@ import com.drawing.util.AbstractListenableModel;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.awt.*;
 
 /**
@@ -18,13 +17,23 @@ import java.awt.*;
  */
 public class DrawingModel extends AbstractListenableModel {
 
-    private List<Drawable> history = new ArrayList<>();
+    private List<Drawable> drawables = new ArrayList<>();
 
     /**
      * @return copie de l'historique (ordre d'affichage / d'énumération)
      */
-    public List<Drawable> getHistory() {
-        return new ArrayList<>(history);
+    public List<Drawable> getDrawables() {
+        return drawables;
+    }
+
+    /**
+     * Remplace la liste de dessins par une autre liste.
+     *
+     * @param drawables est la liste contenant les dessins.
+     */
+    public void setDrawables(List<Drawable> drawables) {
+        this.drawables = drawables;
+        this.fireChange();
     }
 
     /**
@@ -37,7 +46,7 @@ public class DrawingModel extends AbstractListenableModel {
      */
     public void createCircle(double cx, double cy, double rad, Color c) {
         Circle circle = new Circle(cx, cy, rad, c);
-        history.add(circle);
+        drawables.add(circle);
         fireChange();
     }
 
@@ -52,7 +61,7 @@ public class DrawingModel extends AbstractListenableModel {
      */
     public void createRectangle(double x0, double y0, double x1, double y1, Color c) {
         Rectangle rectangle = new Rectangle(x0, y0, x1, y1, c);
-        history.add(rectangle);
+        drawables.add(rectangle);
         fireChange();
     }
 
@@ -67,7 +76,7 @@ public class DrawingModel extends AbstractListenableModel {
      */
     public void createLine(double x0, double y0, double x1, double y1, Color c) {
         Line line = new Line(x0, y0, x1, y1, c);
-        history.add(line);
+        drawables.add(line);
         fireChange();
     }
 
@@ -82,7 +91,7 @@ public class DrawingModel extends AbstractListenableModel {
      */
     public void createEllipse(double x, double y, double rx, double ry, Color c) {
         Ellipse ellipse = new Ellipse(x, y, rx, ry, c);
-        history.add(ellipse);
+        drawables.add(ellipse);
         fireChange();
     }
 
@@ -96,11 +105,11 @@ public class DrawingModel extends AbstractListenableModel {
         Group group = new Group(label);
         List<Drawable> toRemove = new ArrayList<>();
         for (int i : ranks) {
-            group.add(history.get(i));
-            toRemove.add(history.get(i));
+            group.add(drawables.get(i));
+            toRemove.add(drawables.get(i));
         }
-        history.removeAll(toRemove);
-        history.add(group);
+        drawables.removeAll(toRemove);
+        drawables.add(group);
         fireChange();
     }
 
@@ -111,10 +120,10 @@ public class DrawingModel extends AbstractListenableModel {
      * @return {@code true} si un groupe a été supprimé
      */
     public boolean deleteGroup(int rank) {
-        Drawable group = history.get(rank);
+        Drawable group = drawables.get(rank);
         if (group instanceof Group) {
-            history.addAll(((Group) group).getDrawables());
-            history.remove(rank);
+            drawables.addAll(((Group) group).getDrawables());
+            drawables.remove(rank);
             fireChange();
             return true;
         }
@@ -124,7 +133,7 @@ public class DrawingModel extends AbstractListenableModel {
 
     /** Vide l'historique et notifie les observateurs. */
     public void reset() {
-        history.clear();
+        drawables.clear();
         fireChange();
     }
 
@@ -136,8 +145,8 @@ public class DrawingModel extends AbstractListenableModel {
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder();
-        for(int i = 0; i < history.size(); i++) {
-            res.append(i + 1).append(" ").append(history.get(i).toString()).append("\n");
+        for(int i = 0; i < drawables.size(); i++) {
+            res.append(i + 1).append(" ").append(drawables.get(i).toString()).append("\n");
         }
         return res.toString();
     }

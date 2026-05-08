@@ -43,7 +43,7 @@ public class GraphicViewer extends JFrame implements DrawingVisitor, ModelListen
             super.paintComponent(g);
             try {
                 g2 = (Graphics2D) g;
-                for (Drawable d : model.getHistory()) {
+                for (Drawable d : model.getDrawables()) {
                     d.accept(GraphicViewer.this);
                 }
             } finally {

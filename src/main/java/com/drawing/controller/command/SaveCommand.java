@@ -1,7 +1,7 @@
 package com.drawing.controller.command;
 
 import com.drawing.controller.EditorContext;
-import com.drawing.controller.xml.XmlVisitor;
+import com.drawing.controller.xml.XmlSaver;
 import com.drawing.model.shape.Drawable;
 
 /**
@@ -28,11 +28,11 @@ public class SaveCommand implements EditorCommand {
     @Override
     public String execute(EditorContext ctx) {
         try {
-            XmlVisitor visitor = new XmlVisitor();
-            for (Drawable d : ctx.getDrawingModel().getHistory()) {
-                d.accept(visitor);
+            XmlSaver saver = new XmlSaver();
+            for (Drawable d : ctx.getDrawingModel().getDrawables()) {
+                d.accept(saver);
             }
-            visitor.save(args[0]);
+            saver.save(args[0]);
             return "Le dessin a bien été sauvegardé.";
         } catch (Exception e) {
             System.err.println("Erreur sauvegarde : " + e.getMessage());

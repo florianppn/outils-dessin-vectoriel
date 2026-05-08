@@ -20,7 +20,7 @@ import java.io.File;
  * @author Florian Pépin
  * @version 1.0
  */
-public class XmlVisitor implements DrawingVisitor {
+public class XmlSaver implements DrawingVisitor {
 
     private Document doc;
     private Element current;
@@ -30,7 +30,7 @@ public class XmlVisitor implements DrawingVisitor {
      *
      * @throws ParserConfigurationException si la fabrique de parseur XML ne peut pas être créée
      */
-    public XmlVisitor() throws ParserConfigurationException {
+    public XmlSaver() throws ParserConfigurationException {
         doc = DocumentBuilderFactory.newInstance()
                 .newDocumentBuilder()
                 .newDocument();
