@@ -39,4 +39,4 @@ mvn javadoc:javadoc
 
 La documentation HTML est produite dans le dossier `javadoc/` (ouvrir `javadoc/apidocs/index.html` dans un navigateur).
 
-Le rapport du projet se trouve dans `doc/rapport.tex`.
+Le rapport du projet se trouve dans `doc/rapport.pdf`.
