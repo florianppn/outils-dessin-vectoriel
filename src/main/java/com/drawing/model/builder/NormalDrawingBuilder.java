@@ -9,9 +9,21 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+/**
+ * Implémentation de DrawingBuilder qui construit une liste de Drawable.
+ *
+ * @author Florian Pépin
+ * @version 1.0
+ */
 public class NormalDrawingBuilder implements DrawingBuilder {
 
+    /**
+     * Liste des éléments dessinables construits. Les éléments sont ajoutés à la liste ou au groupe en cours.
+     */
     private final List<Drawable> drawables = new ArrayList<>();
+    /**
+     * Pile pour gérer les groupes imbriqués. Chaque fois que beginGroup() est appelé, un nouveau groupe est poussé sur la pile.
+     */
     private final Deque<Group> groupStack = new ArrayDeque<>();
 
     @Override
@@ -55,12 +67,18 @@ public class NormalDrawingBuilder implements DrawingBuilder {
 
     @Override
     public void endGroup() {
+        if (groupStack.isEmpty()) {
+            throw new IllegalStateException("endGroup() appelé sans beginGroup()");
+        }
         Group finished = groupStack.pop();
         addDrawable(finished);
     }
 
     @Override
     public List<Drawable> getResult() {
+        if (!groupStack.isEmpty()) {
+            throw new IllegalStateException("Groupes non fermés: endGroup() manquant");
+        }
         return new ArrayList<>(drawables);
     }
 

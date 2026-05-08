@@ -1,7 +1,6 @@
 package com.drawing.controller.xml;
 
 import com.drawing.model.builder.DrawingBuilder;
-import com.drawing.model.builder.NormalDrawingBuilder;
 import com.drawing.util.ColorDecode;
 
 import org.w3c.dom.Document;
