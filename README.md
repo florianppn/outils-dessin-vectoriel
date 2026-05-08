@@ -17,11 +17,15 @@ mvn clean compile -Pedit exec:java
 
 ## Lancer l’application Fusion (`merge A.vec B.vec fusion.vec`)
 
+À la racine du dépôt :
+
 ```bash
 mvn clean compile -Pmerge exec:java
 ```
 
 ### Lancer l’application de Conversion en image PNG (`v2bmp in.vec out.png`)
+
+À la racine du dépôt :
 
 ```bash
 mvn clean compile -Pv2bmp exec:java
