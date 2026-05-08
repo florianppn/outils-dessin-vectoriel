@@ -21,17 +21,17 @@ public class DrawingMerger {
      * @param b sous-liste b
      * @return un groupe qui représente la fusion des deux sous-listes
      */
-    public Group merge(List<Drawable> a, List<Drawable> b) {
+    public List<Drawable> merge(List<Drawable> a, List<Drawable> b) {
         Group groupA = new Group("A");
         groupA.setDrawables(new ArrayList<>(a));
 
         Group groupB = new Group("B");
         groupB.setDrawables(new ArrayList<>(b));
 
-        Group groupC = new Group("C");
-        groupC.add(groupA);
-        groupC.add(groupB);
-        return groupC;
+        List<Drawable> drawables = new ArrayList<>();
+        drawables.add(groupA);
+        drawables.add(groupB);
+        return drawables;
     }
 
 }

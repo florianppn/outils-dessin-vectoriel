@@ -1,11 +1,12 @@
 package com.drawing.controller.xml;
 
 import com.drawing.model.builder.DrawingBuilder;
-import com.drawing.model.shape.Group;
+import com.drawing.model.shape.*;
 import com.drawing.util.ColorDecode;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import java.awt.Color;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -59,33 +60,53 @@ public class XmlLoader {
 
             Element e = (Element) node;
             switch (e.getTagName()) {
-                case "rect" -> drawingBuilder.setRectangle(
-                    Double.parseDouble(e.getAttribute("x0")),
-                    Double.parseDouble(e.getAttribute("y0")),
-                    Double.parseDouble(e.getAttribute("x1")),
-                    Double.parseDouble(e.getAttribute("y1")),
-                    ColorDecode.decode(e.getAttribute("color"))
-                );
-                case "circ" -> drawingBuilder.setCircle(
-                    Double.parseDouble(e.getAttribute("cx")),
-                    Double.parseDouble(e.getAttribute("cy")),
-                    Double.parseDouble(e.getAttribute("rad")),
-                    ColorDecode.decode(e.getAttribute("color"))
-                );
-                case "line" -> drawingBuilder.setLine(
-                    Double.parseDouble(e.getAttribute("x0")),
-                    Double.parseDouble(e.getAttribute("y0")),
-                    Double.parseDouble(e.getAttribute("x1")),
-                    Double.parseDouble(e.getAttribute("y1")),
-                    ColorDecode.decode(e.getAttribute("color"))
-                );
-                case "elli" -> drawingBuilder.setEllipse(
-                    Double.parseDouble(e.getAttribute("x")),
-                    Double.parseDouble(e.getAttribute("y")),
-                    Double.parseDouble(e.getAttribute("rx")),
-                    Double.parseDouble(e.getAttribute("ry")),
-                    ColorDecode.decode(e.getAttribute("color"))
-                );
+                case "rect" -> {
+                    double x0 = Double.parseDouble(e.getAttribute("x0"));
+                    double y0 = Double.parseDouble(e.getAttribute("y0"));
+                    double x1 = Double.parseDouble(e.getAttribute("x1"));
+                    double y1 = Double.parseDouble(e.getAttribute("y1"));
+                    Color c = ColorDecode.decode(e.getAttribute("color"));
+                    if (currentGroup != null) {
+                        currentGroup.add(new Rectangle(x0, y0, x1, y1, c));
+                    } else {
+                        drawingBuilder.setRectangle(x0, y0, x1, y1, c);
+                    }
+                }
+                case "circ" -> {
+                    double cx = Double.parseDouble(e.getAttribute("cx"));
+                    double cy = Double.parseDouble(e.getAttribute("cy"));
+                    double rad = Double.parseDouble(e.getAttribute("rad"));
+                    Color c = ColorDecode.decode(e.getAttribute("color"));
+                    if (currentGroup != null) {
+                        currentGroup.add(new Circle(cx, cy, rad, c));
+                    } else {
+                        drawingBuilder.setCircle(cx, cy, rad, c);
+                    }
+                }
+                case "line" -> {
+                    double x0 = Double.parseDouble(e.getAttribute("x0"));
+                    double y0 = Double.parseDouble(e.getAttribute("y0"));
+                    double x1 = Double.parseDouble(e.getAttribute("x1"));
+                    double y1 = Double.parseDouble(e.getAttribute("y1"));
+                    Color c = ColorDecode.decode(e.getAttribute("color"));
+                    if (currentGroup != null) {
+                        currentGroup.add(new Line(x0, y0, x1, y1, c));
+                    } else {
+                        drawingBuilder.setLine(x0, y0, x1, y1, c);
+                    }
+                }
+                case "elli" -> {
+                    double x = Double.parseDouble(e.getAttribute("x"));
+                    double y = Double.parseDouble(e.getAttribute("y"));
+                    double rx = Double.parseDouble(e.getAttribute("rx"));
+                    double ry = Double.parseDouble(e.getAttribute("ry"));
+                    Color c = ColorDecode.decode(e.getAttribute("color"));
+                    if (currentGroup != null) {
+                        currentGroup.add(new Ellipse(x, y, rx, ry, c));
+                    } else {
+                        drawingBuilder.setEllipse(x, y, rx, ry, c);
+                    }
+                }
                 case "group" -> parseGroup(e);
             }
         }
