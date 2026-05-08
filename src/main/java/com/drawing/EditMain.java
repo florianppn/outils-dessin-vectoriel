@@ -3,7 +3,6 @@ package com.drawing;
 import com.drawing.controller.Editor;
 import com.drawing.controller.EditorContext;
 import com.drawing.controller.commandset.*;
-import com.drawing.controller.registry.CommandRegistry;
 import com.drawing.model.DrawingModel;
 import com.drawing.view.GraphicViewer;
 
@@ -15,7 +14,7 @@ import java.util.List;
  * @author Florian Pépin
  * @version 1.0
  */
-public class App {
+public class EditMain {
 
     /**
      * @param args arguments de ligne de commande (non utilisés)
@@ -23,16 +22,14 @@ public class App {
     public static void main(String[] args) {
         DrawingModel model = new DrawingModel();
         GraphicViewer viewer = new GraphicViewer(model);
-        CommandRegistry registry = new CommandRegistry();
-        Editor editor = new Editor(registry, new EditorContext(model, viewer));
+        Editor editor = new Editor(new EditorContext(model, viewer));
 
         List.of(
                 new DrawingCommandSet(),
                 new GroupCommandSet(),
                 new FileCommandSet(),
                 new SystemCommandSet()
-        ).forEach(s -> s.register(registry));
-
+        ).forEach(s -> s.register(editor));
         editor.run();
     }
     

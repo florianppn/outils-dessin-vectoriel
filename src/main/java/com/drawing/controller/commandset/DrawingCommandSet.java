@@ -4,7 +4,7 @@ import com.drawing.controller.command.CircCommand;
 import com.drawing.controller.command.ElliCommand;
 import com.drawing.controller.command.LineCommand;
 import com.drawing.controller.command.RectCommand;
-import com.drawing.controller.registry.CommandRegistry;
+import com.drawing.controller.Editor;
 import com.drawing.controller.registry.validation.ArityValidator;
 import com.drawing.controller.registry.validation.ColorValidator;
 import com.drawing.controller.registry.validation.DoubleValidator;
@@ -19,20 +19,20 @@ public class DrawingCommandSet implements CommandSet {
 
     /** {@inheritDoc} */
     @Override
-    public void register(CommandRegistry registry) {
-        registry.register("rect",
+    public void register(Editor editor) {
+        editor.register("rect",
                 new ArityValidator(new DoubleValidator(new ColorValidator(4), 0, 1, 2, 3),5),
                 RectCommand::new
         );
-        registry.register("circ",
+        editor.register("circ",
                 new ArityValidator(new DoubleValidator(new ColorValidator(3), 0, 1, 2), 4),
                 CircCommand::new
         );
-        registry.register("line",
+        editor.register("line",
                 new ArityValidator(new DoubleValidator(new ColorValidator(4), 0, 1, 2, 3), 5),
                 LineCommand::new
         );
-        registry.register("elli",
+        editor.register("elli",
                 new ArityValidator(new DoubleValidator(new ColorValidator(4), 0, 1, 2, 3), 5),
                 ElliCommand::new
         );

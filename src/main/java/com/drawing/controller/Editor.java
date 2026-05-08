@@ -1,31 +1,31 @@
 package com.drawing.controller;
 
-import com.drawing.controller.registry.CommandRegistry;
+import com.drawing.controller.registry.CommandFactory;
+import com.drawing.controller.registry.validation.Validator;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
- * Boucle interactive : lit une ligne sur l'entrée standard, dispatche le verbe
- * vers le {@link CommandRegistry}, exécute la commande et affiche le résultat.
+ * Classe principale du contrôleur : elle gère la boucle de lecture et l'exécution des commandes.
  *
  * @author Florian Pépin
  * @version 1.0
  */
 public class Editor {
 
-    private CommandRegistry commandRegistry;
+    private Map<String, CommandFactory> commands;
     private EditorContext ctx;
 
-    /**
-     * @param commandRegistry table des commandes enregistrées
-     * @param ctx contexte passé à chaque {@link com.drawing.controller.command.EditorCommand#execute(EditorContext)}
-     */
-    public Editor(CommandRegistry commandRegistry, EditorContext ctx) {
-        this.commandRegistry = commandRegistry;
+    public Editor(EditorContext ctx) {
+        this.commands = new HashMap<>();
         this.ctx = ctx;
     }
 
-    /** Lance la boucle de lecture jusqu'à fermeture du flux d'entrée. */
+    /**
+     * Lance la boucle de lecture jusqu'à fermeture du flux d'entrée.
+     */
     public void run() {
         System.out.println("Bienvenue ! Tapez 'help' pour voir les commandes.\n");
         try (Scanner scanner = new Scanner(System.in)) {
@@ -52,7 +52,22 @@ public class Editor {
     public String handleLine(String[] args) {
         String[] argsCmd = new String[args.length - 1];
         System.arraycopy(args, 1, argsCmd, 0, args.length - 1);
-        return commandRegistry.dispatch(args[0]).create(argsCmd).execute(ctx);
+        CommandFactory commandFactory = commands.get(args[0]);
+        return (commandFactory != null) ? commandFactory.create(argsCmd).execute(ctx) : commands.get("help").create(argsCmd).execute(ctx);
+    }
+
+    /**
+     * Enregistre une commande : à l'exécution, le validateur est appliqué puis la fabrique crée la commande.
+     *
+     * @param verb mot-clé saisi en première position sur la ligne
+     * @param validator chaîne ou validateur unique pour les arguments
+     * @param factory création de la commande après validation
+     */
+    public void register(String verb, Validator validator, CommandFactory factory) {
+        commands.put(verb, args -> {
+            validator.validate(args);
+            return factory.create(args);
+        });
     }
 
 }

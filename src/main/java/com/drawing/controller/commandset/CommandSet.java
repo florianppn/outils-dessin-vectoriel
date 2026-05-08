@@ -1,9 +1,9 @@
 package com.drawing.controller.commandset;
 
-import com.drawing.controller.registry.CommandRegistry;
+import com.drawing.controller.Editor;
 
 /**
- * Groupe cohérent de commandes enregistrées dans un {@link CommandRegistry} (dessin, fichiers, etc.).
+ * Interface représentant un ensemble de commandes à enregistrer dans le contrôleur.
  *
  * @author Florian Pépin
  * @version 1.0
@@ -13,8 +13,8 @@ public interface CommandSet {
     /**
      * Enregistre toutes les commandes de cet ensemble dans le registre donné.
      *
-     * @param registry table des commandes à laquelle ajouter les entrées de cet ensemble
+     * @param editor le contrôleur dans lequel les commandes seront exécutées
      */
-    void register(CommandRegistry registry);
+    void register(Editor editor);
 
 }

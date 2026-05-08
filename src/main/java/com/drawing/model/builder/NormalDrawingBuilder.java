@@ -26,6 +26,7 @@ public class NormalDrawingBuilder implements DrawingBuilder {
      */
     private final Deque<Group> groupStack = new ArrayDeque<>();
 
+    /** {@inheritDoc} */
     @Override
     public void reset() {
         drawables.clear();
@@ -40,31 +41,37 @@ public class NormalDrawingBuilder implements DrawingBuilder {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setRectangle(double x0, double y0, double x1, double y1, Color c) {
         addDrawable(new Rectangle(x0, y0, x1, y1, c));
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setCircle(double cx, double cy, double rad, Color c) {
         addDrawable(new Circle(cx, cy, rad, c));
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setLine(double x0, double y0, double x1, double y1, Color c) {
         addDrawable(new Line(x0, y0, x1, y1, c));
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setEllipse(double x, double y, double rx, double ry, Color c) {
         addDrawable(new Ellipse(x, y, rx, ry, c));
     }
 
+    /** {@inheritDoc} */
     @Override
     public void beginGroup(String label) {
         groupStack.push(new Group(label));
     }
 
+    /** {@inheritDoc} */
     @Override
     public void endGroup() {
         if (groupStack.isEmpty()) {
@@ -74,6 +81,7 @@ public class NormalDrawingBuilder implements DrawingBuilder {
         addDrawable(finished);
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<Drawable> getResult() {
         if (!groupStack.isEmpty()) {
