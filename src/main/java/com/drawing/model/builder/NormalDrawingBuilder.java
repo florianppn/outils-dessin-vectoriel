@@ -4,47 +4,64 @@ import com.drawing.model.shape.Drawable;
 import com.drawing.model.shape.*;
 
 import java.awt.Color;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 public class NormalDrawingBuilder implements DrawingBuilder {
 
-    List<Drawable> drawables = new ArrayList<>();
+    private final List<Drawable> drawables = new ArrayList<>();
+    private final Deque<Group> groupStack = new ArrayDeque<>();
 
     @Override
     public void reset() {
         drawables.clear();
+        groupStack.clear();
+    }
+
+    private void addDrawable(Drawable d) {
+        if (groupStack.isEmpty()) {
+            drawables.add(d);
+        } else {
+            groupStack.peek().add(d);
+        }
     }
 
     @Override
     public void setRectangle(double x0, double y0, double x1, double y1, Color c) {
-        drawables.add(new Rectangle(x0, y0, x1, y1, c));
+        addDrawable(new Rectangle(x0, y0, x1, y1, c));
     }
 
     @Override
     public void setCircle(double cx, double cy, double rad, Color c) {
-        drawables.add(new Circle(cx, cy, rad, c));
+        addDrawable(new Circle(cx, cy, rad, c));
     }
 
     @Override
     public void setLine(double x0, double y0, double x1, double y1, Color c) {
-        drawables.add(new Line(x0, y0, x1, y1, c));
+        addDrawable(new Line(x0, y0, x1, y1, c));
     }
 
     @Override
     public void setEllipse(double x, double y, double rx, double ry, Color c) {
-        drawables.add(new Ellipse(x, y, rx, ry, c));
+        addDrawable(new Ellipse(x, y, rx, ry, c));
     }
 
     @Override
-    public void setGroup(List<Drawable> drawables, String label) {
-        Group g = new Group(label);
-        g.setDrawables(drawables);
-        drawables.add(g);
+    public void beginGroup(String label) {
+        groupStack.push(new Group(label));
     }
 
+    @Override
+    public void endGroup() {
+        Group finished = groupStack.pop();
+        addDrawable(finished);
+    }
+
+    @Override
     public List<Drawable> getResult() {
-        return drawables;
+        return new ArrayList<>(drawables);
     }
 
 }

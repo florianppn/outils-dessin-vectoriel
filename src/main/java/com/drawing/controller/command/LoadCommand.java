@@ -2,6 +2,7 @@ package com.drawing.controller.command;
 
 import com.drawing.controller.EditorContext;
 import com.drawing.controller.xml.XmlLoader;
+import com.drawing.model.builder.NormalDrawingBuilder;
 
 /**
  * Réinitialise le modèle puis charge un dessin depuis un fichier XML.
@@ -27,8 +28,9 @@ public class LoadCommand implements EditorCommand {
     @Override
     public String execute(EditorContext ctx) {
         try {
-            ctx.getDrawingModel().reset();
-            new XmlLoader(ctx.getDrawingModel()).load(args[0]);
+            NormalDrawingBuilder builder = new NormalDrawingBuilder();
+            new XmlLoader(builder).load(args[0]);
+            ctx.getDrawingModel().setDrawables(builder.getResult());
             return "Le dessin a bien été chargé.";
         } catch (Exception e) {
             System.err.println("Erreur chargement : " + e.getMessage());

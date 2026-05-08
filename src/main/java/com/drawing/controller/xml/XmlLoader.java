@@ -1,8 +1,8 @@
 package com.drawing.controller.xml;
 
+import com.drawing.model.builder.DrawingBuilder;
 import com.drawing.model.builder.NormalDrawingBuilder;
 import com.drawing.util.ColorDecode;
-import com.drawing.model.DrawingModel;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -12,21 +12,20 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 
 /**
- * Lit un fichier XML de dessin et recrée les formes dans un {@link DrawingModel}
- * via les méthodes {@code create*} (notifications incluses).
+ * Lit un fichier XML de dessin et délègue la construction des formes à un builder.
  *
  * @author Florian Pépin
  * @version 1.0
  */
 public class XmlLoader {
 
-    private NormalDrawingBuilder normalDrawingBuilder;
+    private DrawingBuilder drawingBuilder;
 
     /**
-     * @param normalDrawingBuilder Builder cible.
+     * @param drawingBuilder Builder cible.
      */
-    public XmlLoader(NormalDrawingBuilder normalDrawingBuilder) {
-        this.normalDrawingBuilder = normalDrawingBuilder;
+    public XmlLoader(DrawingBuilder drawingBuilder) {
+        this.drawingBuilder = drawingBuilder;
     }
 
     /**
@@ -51,27 +50,27 @@ public class XmlLoader {
 
             Element e = (Element) node;
             switch (e.getTagName()) {
-                case "rect" -> normalDrawingBuilder.setRectangle(
+                case "rect" -> drawingBuilder.setRectangle(
                     Double.parseDouble(e.getAttribute("x0")),
                     Double.parseDouble(e.getAttribute("y0")),
                     Double.parseDouble(e.getAttribute("x1")),
                     Double.parseDouble(e.getAttribute("y1")),
                     ColorDecode.decode(e.getAttribute("color"))
                 );
-                case "circ" -> normalDrawingBuilder.setCircle(
+                case "circ" -> drawingBuilder.setCircle(
                     Double.parseDouble(e.getAttribute("cx")),
                     Double.parseDouble(e.getAttribute("cy")),
                     Double.parseDouble(e.getAttribute("rad")),
                     ColorDecode.decode(e.getAttribute("color"))
                 );
-                case "line" -> normalDrawingBuilder.setLine(
+                case "line" -> drawingBuilder.setLine(
                     Double.parseDouble(e.getAttribute("x0")),
                     Double.parseDouble(e.getAttribute("y0")),
                     Double.parseDouble(e.getAttribute("x1")),
                     Double.parseDouble(e.getAttribute("y1")),
                     ColorDecode.decode(e.getAttribute("color"))
                 );
-                case "elli" -> normalDrawingBuilder.setEllipse(
+                case "elli" -> drawingBuilder.setEllipse(
                     Double.parseDouble(e.getAttribute("x")),
                     Double.parseDouble(e.getAttribute("y")),
                     Double.parseDouble(e.getAttribute("rx")),
@@ -85,15 +84,9 @@ public class XmlLoader {
 
     private void parseGroup(Element groupEl) {
         String label = groupEl.getAttribute("label");
-        int startIndex = normalDrawingBuilder.getResult().size();
+        drawingBuilder.beginGroup(label);
         parseChildren(groupEl);
-        int endIndex = normalDrawingBuilder.getResult().size();
-
-        int[] ranks = new int[endIndex - startIndex];
-        for (int i = 0; i < ranks.length; i++) {
-            ranks[i] = startIndex + i;
-        }
-        normalDrawingBuilder.setGroup(label, ranks);
+        drawingBuilder.endGroup();
     }
 
 }

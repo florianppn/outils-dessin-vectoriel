@@ -17,6 +17,10 @@ public interface DrawingBuilder {
 
     void setEllipse(double x, double y, double rx, double ry, Color c);
 
-    void setGroup(List<Drawable> drawables, String label);
+    void beginGroup(String label);
+
+    void endGroup();
+
+    List<Drawable> getResult();
 
 }

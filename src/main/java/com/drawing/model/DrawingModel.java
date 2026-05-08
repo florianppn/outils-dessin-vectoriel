@@ -23,7 +23,7 @@ public class DrawingModel extends AbstractListenableModel {
      * @return copie de l'historique (ordre d'affichage / d'énumération)
      */
     public List<Drawable> getDrawables() {
-        return drawables;
+        return new ArrayList<>(drawables);
     }
 
     /**
@@ -32,7 +32,7 @@ public class DrawingModel extends AbstractListenableModel {
      * @param drawables est la liste contenant les dessins.
      */
     public void setDrawables(List<Drawable> drawables) {
-        this.drawables = drawables;
+        this.drawables = new ArrayList<>(drawables);
         this.fireChange();
     }
 
