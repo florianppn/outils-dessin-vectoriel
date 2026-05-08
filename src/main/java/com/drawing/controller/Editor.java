@@ -32,7 +32,7 @@ public class Editor {
      * Lance la boucle de lecture jusqu'à fermeture du flux d'entrée.
      */
     public void run() {
-        System.out.println("Bienvenue ! Tapez 'help' pour voir les commandes.\n");
+        System.out.println("Bienvenue dans l'éditeur !\n");
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 System.out.print("> ");
