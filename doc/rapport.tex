@@ -187,18 +187,31 @@ Client & \texttt{CommandRegistry} \\
 
 \newpage
 
-\section{Patrons de conception écartés}
+\section{Patron de conception Monteur}
 
-J'ai hésité à utiliser quatre patrons de conception que j'ai finalement retiré.\\
+\subsection{Motivation}
 
-Le pattern Strategy a été envisagé pour les différentes couleurs (bleu, rouge, etc.) mais finalement ce serait \emph{overkill} d'utiliser ce pattern dans notre cas puisque je n'ai pas de système très poussé avec différents thèmes par exemple.\\\\
+à compléter
 
-Le pattern Builder a été envisagé également pour la construction des commandes. J'aurais pu créer un Builder par commande, mais cela aurait engendré une explosion de classes sans valeur architecturale. Un Builder par famille de commandes aurait également été envisageable, mais cela violerait le principe de responsabilité unique en construisant par exemple un rectangle et un cercle dans le même Builder. J'ai donc opté pour le pattern Chain of Responsibility pour la validation des arguments, combinée à la CommandFactory avec lambda pour la construction.\\
-Ce patron n'ayant pas été abordé en cours, je me suis appuyé sur la littérature disponible pour guider mes choix architecturaux.\\\\
+\subsection{Correspondance des acteurs}
 
-Le pattern Factory Method a aussi été envisagé pour être appliquée dans CommandRegistry via une méthode createCommand(). Cependant ce comportement est déjà assuré par la CommandFactory sous forme de lambda. Je trouve cela plus concis et cela ne nécessite pas de sous-classes de CommandRegistry.\\\\
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.34\textwidth}|p{0.54\textwidth}|}
+\hline
+\textbf{Acteur du pattern} & \textbf{Entité dans l'application} \\
+\hline
+\texttt{Director} & XmlLoader \\
+\hline
+\texttt{Builder} & DrawingBuilder \\
+\hline
+\texttt{Concrete Builder} & NormalDrawingBuilder \\
+\hline
+\texttt{Product} & List<Drawable> \\
+\hline
+\end{tabular}
 
-L'Abstract Factory a aussi été envisagé pour créer des familles de commandes selon le profil de l'éditeur : Ce patron aurait été particulièrement pertinent si l'application devait supporter plusieurs profils d'éditeurs avec des fonctionnalités différentes (basic, premium, etc...). Cependant, l'application n'étant pas amenée à évoluer dans ce sens, ce patron aurait introduit une complexité non justifiée par les besoins actuels.\\
+\begin{center}
+\includegraphics[width=1\textwidth]{images/UML/builder.jpg}
+\end{center}
 
 \newpage
 
