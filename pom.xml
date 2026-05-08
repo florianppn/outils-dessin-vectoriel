@@ -12,28 +12,17 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <app.mainClass>com.drawing.EditMain</app.mainClass>
     </properties>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.3.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.drawing.EditMain</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>com.drawing.EditMain</mainClass>
+                    <mainClass>${app.mainClass}</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -56,4 +45,27 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>edit</id>
+            <properties>
+                <app.mainClass>com.drawing.EditMain</app.mainClass>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>merge</id>
+            <properties>
+                <app.mainClass>com.drawing.MergeMain</app.mainClass>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>v2bmp</id>
+            <properties>
+                <app.mainClass>com.drawing.V2bmpMain</app.mainClass>
+            </properties>
+        </profile>
+    </profiles>
 </project>
