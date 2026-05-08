@@ -12,19 +12,19 @@ Petit éditeur de dessin vectoriel en Java : interface graphique (Swing) et comm
 À la racine du dépôt :
 
 ```bash
-mvn -Pedit exec:java
+mvn clean compile -Pedit exec:java
 ```
 
 ## Lancer l’application Fusion (`merge A.vec B.vec fusion.vec`)
 
 ```bash
-mvn -Pmerge exec:java
+mvn clean compile -Pmerge exec:java
 ```
 
 ### Lancer l’application de Conversion en image PNG (`v2bmp in.vec out.png`)
 
 ```bash
-mvn -Pv2bmp exec:java
+mvn clean compile -Pv2bmp exec:java
 ```
 
 ## Générer la Javadoc

@@ -2,11 +2,14 @@ com.drawing
 com.drawing.controller
 com.drawing.controller.command
 com.drawing.controller.commandset
+com.drawing.controller.converter
+com.drawing.controller.merge
 com.drawing.controller.registry
 com.drawing.controller.registry.validation
 com.drawing.controller.xml
 com.drawing.error
 com.drawing.model
+com.drawing.model.builder
 com.drawing.model.shape
 com.drawing.util
 com.drawing.view

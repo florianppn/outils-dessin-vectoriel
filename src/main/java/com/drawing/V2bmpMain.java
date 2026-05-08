@@ -17,7 +17,7 @@ public class V2bmpMain {
      */
     public static void main(String[] args) {
         Editor editor = new Editor();
-        editor.register("fusion",
+        editor.register("v2bmp",
                 new ArityValidator(2),
                 V2bmpCommand::new
         );
