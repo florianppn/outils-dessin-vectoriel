@@ -26,6 +26,9 @@ public class GrpCommand implements EditorCommand {
      */
     @Override
     public String execute(EditorContext ctx) {
+        if(args[0].length() > 20) {
+            return "Le nom du groupe ne doit pas faire plus de 20 caractères.";
+        }
         DrawingModel d = ctx.getDrawingModel();
         int[] ranks = new int[args.length - 1];
         for (int i = 1; i < args.length; i++) {

@@ -9,7 +9,7 @@ import com.drawing.view.GraphicViewer;
 import java.util.List;
 
 /**
- * Point d'entrée : crée le modèle, la vue, le registre de commandes et lance l'éditeur.
+ * Point d'entrée.
  *
  * @author Florian Pépin
  * @version 1.0
