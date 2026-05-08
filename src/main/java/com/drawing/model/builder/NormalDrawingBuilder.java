@@ -5,6 +5,8 @@ import com.drawing.model.shape.*;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.ArrayDeque;
 import java.util.List;
 
 /**
@@ -16,18 +18,23 @@ import java.util.List;
 public class NormalDrawingBuilder implements DrawingBuilder {
 
     /**
-     * Liste des éléments dessinables construits. Les éléments sont ajoutés à la liste ou au groupe en cours.
+     * Pile de listes d'éléments dessinables pour gérer les groupes imbriqués.
      */
-    private List<Drawable> drawables = new ArrayList<>();
+    private Deque<List<Drawable>> stack = new ArrayDeque<>();
+
+    public NormalDrawingBuilder() {
+        stack.push(new ArrayList<>());
+    }
 
     /** {@inheritDoc} */
     @Override
     public void reset() {
-        drawables.clear();
+        stack.clear();
+        stack.push(new ArrayList<>());
     }
 
     private void addDrawable(Drawable d) {
-        drawables.add(d);
+        stack.peek().add(d);
     }
 
     /** {@inheritDoc} */
@@ -62,8 +69,23 @@ public class NormalDrawingBuilder implements DrawingBuilder {
 
     /** {@inheritDoc} */
     @Override
+    public void startGroup() {
+        stack.push(new ArrayList<>());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void endGroup(String label) {
+        if (stack.size() > 1) {
+            List<Drawable> children = stack.pop();
+            addDrawable(new Group(children, label));
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public List<Drawable> getResult() {
-        return new ArrayList<>(drawables);
+        return new ArrayList<>(stack.peek());
     }
 
 }

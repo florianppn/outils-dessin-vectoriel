@@ -60,9 +60,21 @@ public interface DrawingBuilder {
 
     /**
      * Définit un groupe de formes avec une étiquette.
+     * @param drawables liste des formes du groupe
      * @param label étiquette du groupe
      */
     void setGroup(List<Drawable> drawables, String label);
+
+    /**
+     * Débute la construction d'un nouveau groupe. Les formes suivantes seront ajoutées à ce groupe.
+     */
+    void startGroup();
+
+    /**
+     * Termine la construction du groupe courant et l'ajoute au niveau parent avec une étiquette.
+     * @param label étiquette du groupe
+     */
+    void endGroup(String label);
 
     /**
      * @return Retourne la liste des formes dessinables construites par le builder.
