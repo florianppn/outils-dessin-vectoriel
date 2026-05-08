@@ -52,23 +52,23 @@ public class V2bmpConverter implements DrawingVisitor {
         ImageIO.write(image, "png", new File(pngFile));
     }
 
-    private static int i(double v) {
-        return (int) Math.round(v);
-    }
-
     @Override
     public void visit(Line line) {
         g.setColor(line.getColor());
-        g.drawLine(i(line.getX0()), i(line.getY0()), i(line.getX1()), i(line.getY1()));
+        g.drawLine((int) Math.round(line.getX0()),
+                (int) Math.round(line.getY0()),
+                (int) Math.round(line.getX1()),
+                (int) Math.round(line.getY1())
+        );
     }
 
     @Override
     public void visit(Rectangle rectangle) {
         g.setColor(rectangle.getColor());
-        int x0 = i(Math.min(rectangle.getX0(), rectangle.getX1()));
-        int y0 = i(Math.min(rectangle.getY0(), rectangle.getY1()));
-        int w = i(Math.abs(rectangle.getWidth()));
-        int h = i(Math.abs(rectangle.getHeight()));
+        int x0 = (int) Math.round(Math.min(rectangle.getX0(), rectangle.getX1()));
+        int y0 = (int) Math.round(Math.min(rectangle.getY0(), rectangle.getY1()));
+        int w = (int) Math.round(Math.abs(rectangle.getWidth()));
+        int h = (int) Math.round(Math.abs(rectangle.getHeight()));
         g.drawRect(x0, y0, w, h);
     }
 
@@ -76,19 +76,19 @@ public class V2bmpConverter implements DrawingVisitor {
     public void visit(Circle circle) {
         g.setColor(circle.getColor());
         double r = circle.getRad();
-        int x = i(circle.getCx() - r);
-        int y = i(circle.getCy() - r);
-        int d = i(2 * r);
+        int x = (int) Math.round(circle.getCx() - r);
+        int y = (int) Math.round(circle.getCy() - r);
+        int d = (int) Math.round(2 * r);
         g.drawOval(x, y, d, d);
     }
 
     @Override
     public void visit(Ellipse ellipse) {
         g.setColor(ellipse.getColor());
-        int x = i(ellipse.getX() - ellipse.getRx());
-        int y = i(ellipse.getY() - ellipse.getRy());
-        int w = i(2 * ellipse.getRx());
-        int h = i(2 * ellipse.getRy());
+        int x = (int) Math.round(ellipse.getX() - ellipse.getRx());
+        int y = (int) Math.round(ellipse.getY() - ellipse.getRy());
+        int w = (int) Math.round(2 * ellipse.getRx());
+        int h = (int) Math.round(2 * ellipse.getRy());
         g.drawOval(x, y, w, h);
     }
 

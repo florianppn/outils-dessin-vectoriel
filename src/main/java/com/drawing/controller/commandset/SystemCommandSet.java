@@ -1,6 +1,5 @@
 package com.drawing.controller.commandset;
 
-import com.drawing.controller.command.HelpCommand;
 import com.drawing.controller.command.ListCommand;
 import com.drawing.controller.command.NewCommand;
 import com.drawing.controller.command.QuitCommand;
@@ -21,7 +20,6 @@ public class SystemCommandSet implements CommandSet {
             editor.register("new",  new ArityValidator(0), NewCommand::new);
             editor.register("list", new ArityValidator(0), ListCommand::new);
             editor.register("quit", new ArityValidator(0), QuitCommand::new);
-            editor.register("help", new ArityValidator(0), HelpCommand::new);
         }
 
 }

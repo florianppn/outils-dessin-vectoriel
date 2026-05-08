@@ -4,9 +4,7 @@ import com.drawing.model.shape.Drawable;
 import com.drawing.model.shape.*;
 
 import java.awt.Color;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
 /**
@@ -20,25 +18,16 @@ public class NormalDrawingBuilder implements DrawingBuilder {
     /**
      * Liste des éléments dessinables construits. Les éléments sont ajoutés à la liste ou au groupe en cours.
      */
-    private final List<Drawable> drawables = new ArrayList<>();
-    /**
-     * Pile pour gérer les groupes imbriqués. Chaque fois que beginGroup() est appelé, un nouveau groupe est poussé sur la pile.
-     */
-    private final Deque<Group> groupStack = new ArrayDeque<>();
+    private List<Drawable> drawables = new ArrayList<>();
 
     /** {@inheritDoc} */
     @Override
     public void reset() {
         drawables.clear();
-        groupStack.clear();
     }
 
     private void addDrawable(Drawable d) {
-        if (groupStack.isEmpty()) {
-            drawables.add(d);
-        } else {
-            groupStack.peek().add(d);
-        }
+        drawables.add(d);
     }
 
     /** {@inheritDoc} */
@@ -67,26 +56,13 @@ public class NormalDrawingBuilder implements DrawingBuilder {
 
     /** {@inheritDoc} */
     @Override
-    public void beginGroup(String label) {
-        groupStack.push(new Group(label));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void endGroup() {
-        if (groupStack.isEmpty()) {
-            throw new IllegalStateException("endGroup() appelé sans beginGroup()");
-        }
-        Group finished = groupStack.pop();
-        addDrawable(finished);
+    public void setGroup(List<Drawable> drawables, String label) {
+        addDrawable(new Group(drawables, label));
     }
 
     /** {@inheritDoc} */
     @Override
     public List<Drawable> getResult() {
-        if (!groupStack.isEmpty()) {
-            throw new IllegalStateException("Groupes non fermés: endGroup() manquant");
-        }
         return new ArrayList<>(drawables);
     }
 

@@ -7,7 +7,7 @@ Petit éditeur de dessin vectoriel en Java : interface graphique (Swing) et comm
 - Java 17
 - Maven
 
-## Lancer l’application
+## Lancer l’application Edit
 
 À la racine du dépôt :
 
@@ -15,27 +15,16 @@ Petit éditeur de dessin vectoriel en Java : interface graphique (Swing) et comm
 mvn -Pedit exec:java
 ```
 
-## Lancer les autres programmes
-
-### Fusion de deux dessins (`merge`)
+## Lancer l’application Fusion (`merge A.vec B.vec fusion.vec`)
 
 ```bash
 mvn -Pmerge exec:java
 ```
 
-### Conversion en image PNG (`v2bmp`)
+### Lancer l’application de Conversion en image PNG (`v2bmp in.vec out.png`)
 
 ```bash
 mvn -Pv2bmp exec:java
-```
-
-Les fichiers d'entrée/sortie sont ensuite fournis via l'interpréteur de commandes dans le terminal de l'application
-(par ex. `merge A.vec B.vec fusion.vec` ou `v2bmp in.vec out.png`).
-
-## Construire le projet
-
-```bash
-mvn package
 ```
 
 ## Générer la Javadoc

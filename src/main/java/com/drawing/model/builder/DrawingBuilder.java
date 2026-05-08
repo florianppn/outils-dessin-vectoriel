@@ -59,15 +59,10 @@ public interface DrawingBuilder {
     void setEllipse(double x, double y, double rx, double ry, Color c);
 
     /**
-     * Commence un groupe de formes avec une étiquette.
-     * @param label nom du groupe
+     * Définit un groupe de formes avec une étiquette.
+     * @param label étiquette du groupe
      */
-    void beginGroup(String label);
-
-    /**
-     * Termine le groupe de formes en cours.
-     */
-    void endGroup();
+    void setGroup(List<Drawable> drawables, String label);
 
     /**
      * @return Retourne la liste des formes dessinables construites par le builder.

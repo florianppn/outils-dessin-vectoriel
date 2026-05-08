@@ -58,7 +58,7 @@ public class Editor {
         String[] argsCmd = new String[args.length - 1];
         System.arraycopy(args, 1, argsCmd, 0, args.length - 1);
         CommandFactory commandFactory = commands.get(args[0]);
-        return (commandFactory != null) ? commandFactory.create(argsCmd).execute(ctx) : commands.get("help").create(argsCmd).execute(ctx);
+        return (commandFactory != null) ? commandFactory.create(argsCmd).execute(ctx) : "Cette commande n'existe pas.";
     }
 
     /**

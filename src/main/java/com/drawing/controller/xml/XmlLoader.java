@@ -1,6 +1,7 @@
 package com.drawing.controller.xml;
 
 import com.drawing.model.builder.DrawingBuilder;
+import com.drawing.model.shape.Group;
 import com.drawing.util.ColorDecode;
 
 import org.w3c.dom.Document;
@@ -18,7 +19,15 @@ import java.io.File;
  */
 public class XmlLoader {
 
+    /**
+     * Builder utilisé pour construire le dessin à partir des éléments du fichier XML.
+     */
     private DrawingBuilder drawingBuilder;
+    /**
+     * Groupe en cours de construction. Les éléments suivants seront ajoutés à ce groupe jusqu'à ce qu'un nouveau groupe soit défini.
+     Si null, les éléments sont ajoutés à la liste principale.
+     */
+    private Group currentGroup = null;
 
     /**
      * @param drawingBuilder Builder cible.
@@ -34,6 +43,7 @@ public class XmlLoader {
      * @throws Exception erreur d'accès fichier, parse XML ou attributs invalides
      */
     public void load(String fileName) throws Exception {
+        currentGroup = null;
         Document doc = DocumentBuilderFactory.newInstance()
                 .newDocumentBuilder()
                 .parse(new File(fileName));
@@ -83,9 +93,18 @@ public class XmlLoader {
 
     private void parseGroup(Element groupEl) {
         String label = groupEl.getAttribute("label");
-        drawingBuilder.beginGroup(label);
+        Group newGroup = new Group(label);
+
+        Group previousGroup = currentGroup;
+        currentGroup = newGroup;
         parseChildren(groupEl);
-        drawingBuilder.endGroup();
+        currentGroup = previousGroup;
+
+        if (previousGroup != null) {
+            previousGroup.add(newGroup);
+        } else {
+            drawingBuilder.setGroup(newGroup.getDrawables(), label);
+        }
     }
 
 }
