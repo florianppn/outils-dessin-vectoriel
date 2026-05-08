@@ -1,5 +1,6 @@
 package com.drawing.controller.xml;
 
+import com.drawing.model.builder.NormalDrawingBuilder;
 import com.drawing.util.ColorDecode;
 import com.drawing.model.DrawingModel;
 
@@ -19,13 +20,13 @@ import java.io.File;
  */
 public class XmlLoader {
 
-    private DrawingModel model;
+    private NormalDrawingBuilder normalDrawingBuilder;
 
     /**
-     * @param model modèle cible (déjà éventuellement vidé par la commande appelante)
+     * @param normalDrawingBuilder Builder cible.
      */
-    public XmlLoader(DrawingModel model) {
-        this.model = model;
+    public XmlLoader(NormalDrawingBuilder normalDrawingBuilder) {
+        this.normalDrawingBuilder = normalDrawingBuilder;
     }
 
     /**
@@ -50,27 +51,27 @@ public class XmlLoader {
 
             Element e = (Element) node;
             switch (e.getTagName()) {
-                case "rect" -> model.createRectangle(
+                case "rect" -> normalDrawingBuilder.setRectangle(
                     Double.parseDouble(e.getAttribute("x0")),
                     Double.parseDouble(e.getAttribute("y0")),
                     Double.parseDouble(e.getAttribute("x1")),
                     Double.parseDouble(e.getAttribute("y1")),
                     ColorDecode.decode(e.getAttribute("color"))
                 );
-                case "circ" -> model.createCircle(
+                case "circ" -> normalDrawingBuilder.setCircle(
                     Double.parseDouble(e.getAttribute("cx")),
                     Double.parseDouble(e.getAttribute("cy")),
                     Double.parseDouble(e.getAttribute("rad")),
                     ColorDecode.decode(e.getAttribute("color"))
                 );
-                case "line" -> model.createLine(
+                case "line" -> normalDrawingBuilder.setLine(
                     Double.parseDouble(e.getAttribute("x0")),
                     Double.parseDouble(e.getAttribute("y0")),
                     Double.parseDouble(e.getAttribute("x1")),
                     Double.parseDouble(e.getAttribute("y1")),
                     ColorDecode.decode(e.getAttribute("color"))
                 );
-                case "elli" -> model.createEllipse(
+                case "elli" -> normalDrawingBuilder.setEllipse(
                     Double.parseDouble(e.getAttribute("x")),
                     Double.parseDouble(e.getAttribute("y")),
                     Double.parseDouble(e.getAttribute("rx")),
@@ -84,15 +85,15 @@ public class XmlLoader {
 
     private void parseGroup(Element groupEl) {
         String label = groupEl.getAttribute("label");
-        int startIndex = model.getDrawables().size();
+        int startIndex = normalDrawingBuilder.getResult().size();
         parseChildren(groupEl);
-        int endIndex = model.getDrawables().size();
+        int endIndex = normalDrawingBuilder.getResult().size();
 
         int[] ranks = new int[endIndex - startIndex];
         for (int i = 0; i < ranks.length; i++) {
             ranks[i] = startIndex + i;
         }
-        model.createGroup(label, ranks);
+        normalDrawingBuilder.setGroup(label, ranks);
     }
 
 }

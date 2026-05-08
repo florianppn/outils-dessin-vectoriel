@@ -29,6 +29,13 @@ public class Group implements Drawable {
     }
 
     /**
+     * @param drawables liste de dessin.
+     */
+    public void setDrawables(List<Drawable> drawables) {
+        this.drawables = drawables;
+    }
+
+    /**
      * @param id index 0-based dans la liste des enfants
      * @return enfant à cet index
      * @throws IndexOutOfBoundsException si l'index est hors limites
