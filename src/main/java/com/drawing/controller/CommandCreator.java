@@ -1,4 +1,4 @@
-package com.drawing.controller.registry;
+package com.drawing.controller;
 
 import com.drawing.controller.command.EditorCommand;
 
@@ -8,7 +8,7 @@ import com.drawing.controller.command.EditorCommand;
  * @author Florian Pépin
  * @version 1.0
  */
-public interface CommandFactory {
+public interface CommandCreator {
 
     /**
      * @param args arguments spécifiques à la commande (peut être vide)

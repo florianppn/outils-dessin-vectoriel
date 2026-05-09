@@ -1,6 +1,5 @@
 package com.drawing.controller;
 
-import com.drawing.controller.registry.CommandFactory;
 import com.drawing.controller.registry.validation.Validator;
 
 import java.util.HashMap;
@@ -15,14 +14,8 @@ import java.util.Scanner;
  */
 public class Editor {
 
-    private static final String DEFAULT_BANNER = "Editeur de dessin vectoriel";
-
     private String text;
-    private Map<String, CommandFactory> commands;
-
-    public Editor() {
-        this(DEFAULT_BANNER);
-    }
+    private Map<String, CommandCreator> commands;
 
     public Editor(String text) {
         this.text = text;
@@ -58,8 +51,8 @@ public class Editor {
     public String handleLine(String[] args) {
         String[] argsCmd = new String[args.length - 1];
         System.arraycopy(args, 1, argsCmd, 0, args.length - 1);
-        CommandFactory commandFactory = commands.get(args[0]);
-        return (commandFactory != null) ? commandFactory.create(argsCmd).execute() : "Cette commande n'existe pas.";
+        CommandCreator commandCreator = commands.get(args[0]);
+        return (commandCreator != null) ? commandCreator.create(argsCmd).execute() : "Cette commande n'existe pas.";
     }
 
     /**
@@ -67,12 +60,12 @@ public class Editor {
      *
      * @param verb mot-clé saisi en première position sur la ligne
      * @param validator chaîne ou validateur unique pour les arguments
-     * @param factory création de la commande après validation
+     * @param creator création de la commande après validation
      */
-    public void register(String verb, Validator validator, CommandFactory factory) {
+    public void register(String verb, Validator validator, CommandCreator creator) {
         commands.put(verb, args -> {
             validator.validate(args);
-            return factory.create(args);
+            return creator.create(args);
         });
     }
 

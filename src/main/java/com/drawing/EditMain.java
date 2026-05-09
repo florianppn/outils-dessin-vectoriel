@@ -17,7 +17,7 @@ public class EditMain {
      */
     public static void main(String[] args) {
         DrawingModel model = new DrawingModel();
-        Editor editor = new Editor();
+        Editor editor = new Editor("Bienvenue sur l'editeur de dessin !\n");
 
         GroupCommandSet commands = new GroupCommandSet();
         commands.add(new DrawingCommandSet());

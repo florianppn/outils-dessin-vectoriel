@@ -16,7 +16,7 @@ public class V2bmpMain {
      * @param args arguments de ligne de commande (non utilisés)
      */
     public static void main(String[] args) {
-        Editor editor = new Editor();
+        Editor editor = new Editor("Bienvenue sur l'editeur de conversion !");
         editor.register("v2bmp",
                 new ArityValidator(2),
                 V2bmpCommand::new
