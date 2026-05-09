@@ -71,7 +71,7 @@ ConcreteCommand & \texttt{RectCommand}, \texttt{CircCommand}, \texttt{SaveComman
 \hline
 Invoker & \texttt{Editor} \\
 \hline
-Receiver & \texttt{DrawingModel} (via \texttt{EditorContext}) \\
+Receiver & \texttt{DrawingModel} \\
 \hline
 \end{tabular}
 
@@ -85,7 +85,7 @@ Receiver & \texttt{DrawingModel} (via \texttt{EditorContext}) \\
 
 \subsection{Motivation}
 
-Lorsque l'historique des formes change, la fenêtre graphique doit se mettre à jour sans que chaque commande connaisse la vue. Sans le patron Observateur, les commandes appelleraient directement \texttt{GraphicViewer}. Grâce à ce patron, \texttt{DrawingModel} notifie les observateurs après chaque changement (\texttt{fireChange}), et \texttt{GraphicViewer} réagit en repeignant le canvas : le modèle reste la source de vérité, la vue reste synchronisée automatiquement.
+Lorsque l'historique des formes change, la fenêtre graphique doit se mettre à jour sans que chaque commande connaisse la vue. Sans le patron Observateur, les commandes appelleraient directement \texttt{GraphicViewer}. Grâce à ce patron, \texttt{DrawingModel} notifie les observateurs après chaque changement (\texttt{fireChange}), et \texttt{GraphicViewer} réagit en repeignant le canvas : le modèle reste la source de vérité, la vue se met à jour automatiquement.
 
 \subsection{Correspondance des acteurs}
 
@@ -127,7 +127,7 @@ Leaf & \texttt{Rectangle}, \texttt{Circle}, \texttt{Line}, \texttt{Ellipse} \\
 \hline
 Composite & \texttt{Group} \\
 \hline
-Client & \texttt{DrawingModel}, \texttt{XmlVisitor}, \texttt{GraphicViewer} \\
+Client & \texttt{DrawingModel}, \texttt{XmlSaver}, \texttt{GraphicViewer} \\
 \hline
 \end{tabular}
 
@@ -143,7 +143,7 @@ Le modèle contient différentes formes (\texttt{Rectangle}, \texttt{Circle}, \t
 \hline
 Visitor & \texttt{DrawingVisitor} \\
 \hline
-ConcreteVisitor & \texttt{GraphicViewer}, \texttt{XmlVisitor} \\
+ConcreteVisitor & \texttt{GraphicViewer}, \texttt{XmlSaver} \\
 \hline
 Element & \texttt{Drawable} \\
 \hline
@@ -177,7 +177,7 @@ AbstractHandler & \texttt{ArgsValidator} \\
 \hline
 ConcreteHandler & \texttt{ArityValidator}, \texttt{MinArityValidator}, \texttt{DoubleValidator}, \texttt{ColorValidator} \\
 \hline
-Client & \texttt{CommandRegistry} \\
+Client & \texttt{Editor} \\
 \hline
 \end{tabular}
 
@@ -191,7 +191,11 @@ Client & \texttt{CommandRegistry} \\
 
 \subsection{Motivation}
 
-à compléter
+Le chargement XML reconstruit un dessin potentiellement imbriqué (groupes dans des groupes). Le patron Monteur permet de séparer la logique de parcours du document XML (directeur) de la logique de construction du produit final (builder).\\
+
+\texttt{XmlLoader} lit les balises et exécute les étapes de construction (\texttt{startGroup}, \texttt{setRectangle}, \texttt{endGroup}, etc.) sans connaître la représentation finale en détail.\\
+
+\texttt{NormalDrawingBuilder} encapsule la création concrète des \texttt{Drawable} et la gestion de la pile de groupes.
 
 \subsection{Correspondance des acteurs}
 
@@ -199,13 +203,13 @@ Client & \texttt{CommandRegistry} \\
 \hline
 \textbf{Acteur du pattern} & \textbf{Entité dans l'application} \\
 \hline
-\texttt{Director} & XmlLoader \\
+Director & \texttt{XmlLoader} \\
 \hline
-\texttt{Builder} & DrawingBuilder \\
+Builder & \texttt{DrawingBuilder} \\
 \hline
-\texttt{Concrete Builder} & NormalDrawingBuilder \\
+Concrete Builder & \texttt{NormalDrawingBuilder} \\
 \hline
-\texttt{Product} & List<Drawable> \\
+Product & \texttt{List<Drawable>} \\
 \hline
 \end{tabular}
 
@@ -219,9 +223,35 @@ Client & \texttt{CommandRegistry} \\
 
 \subsection{Motivation}
 
-à compléter
+Les commandes de l'éditeur sont organisées par famille (\texttt{DrawingCommandSet}, \texttt{ShapeGroupCommandSet}, \texttt{FileCommandSet}, \texttt{SystemCommandSet}). Le \texttt{GroupCommandSet} rassemble ces ensembles et permet de les enregistrer en une seule fois.\\
+
+La création des commandes repose sur l'interface fonctionnelle \texttt{CommandCreator} : chaque verbe est associé à une fabrique (\texttt{create(String[] args)}) stockée dans une map de l'\texttt{Editor}.\\
+
+À la compilation, les lambdas passées à \texttt{register(...)} sont résolues en \texttt{CommandCreator}, puis utilisées à l'exécution pour instancier la bonne \texttt{EditorCommand}.
 
 \subsection{Correspondance des acteurs}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.34\textwidth}|p{0.54\textwidth}|}
+\hline
+\textbf{Acteur du pattern} & \textbf{Entité dans l'application} \\
+\hline
+Component (Composite) & \texttt{CommandSet} \\
+\hline
+Leaf (Composite) & \texttt{DrawingCommandSet}, \texttt{ShapeGroupCommandSet}, \texttt{FileCommandSet}, \texttt{SystemCommandSet} \\
+\hline
+Composite & \texttt{GroupCommandSet} \\
+\hline
+Client (Composite) & \texttt{EditMain} \\
+\hline
+Creator (Fabrique) & \texttt{CommandCreator} \\
+\hline
+ConcreteCreator (Fabrique) & Lambdas enregistrées dans les \texttt{CommandSet} \\
+\hline
+Product (Fabrique) & \texttt{EditorCommand} \\
+\hline
+Contexte de résolution & \texttt{Editor} via \texttt{Map<String, CommandCreator>} \\
+\hline
+\end{tabular}
 
 \begin{center}
 \includegraphics[width=1\textwidth]{images/UML/commandset.jpg}
@@ -242,9 +272,11 @@ Cette architecture applique une séparation des responsabilités avec le modèle
 Les différents contrôleurs (\texttt{Editor}, commandes, registre et validation) orchestre les entrées utilisateur sans implémenter le rendu ni la persistance XML.\\
 La vue (\texttt{GraphicViewer}) ne fait qu'afficher et réagit aux changements via le pattern Observeur.\\\\
 
-Le principe de responsabilité unique se lit dans le découpage des commandes (\texttt{EditorCommand} et sous-classes), des validateurs de la chaîne de responsabilité et des visiteurs (\texttt{XmlVisitor}, \texttt{GraphicViewer}).\\
+Le principe de responsabilité unique se lit dans le découpage des commandes (\texttt{EditorCommand} et sous-classes), des validateurs de la chaîne de responsabilité et des visiteurs (\texttt{XmlSaver}, \texttt{GraphicViewer}).\\
 Le principe ouvert/fermé se retrouve notamment via le Visiteur et le Composite puisqu'ajouter une opération sur les formes (export, affichage) revient à écrire un nouveau visiteur sans modifier les classes de formes.\\
 L'inversion de dépendances apparaît lorsque le contrôle et la fabrique s'appuient sur des abstractions (\texttt{EditorCommand}, \texttt{Validator}, \texttt{Drawable}) plutôt que sur des implémentations figées.\\\\
+
+Par manque de temps, \texttt{XmlLoader} et le \texttt{Builder} sont instanciés directement dans certaines commandes. Une possible évolution serait d'injecter une abstraction dédiée au chargement (par exemple un service \texttt{DrawingImporter}) afin d'améliorer le découplage. À défaut, un \texttt{EditorContext} pourrait au moins centraliser les dépendances partagées des commandes.\\\\
 
 \newpage
 
@@ -282,9 +314,11 @@ Liste des types publics (classes et interfaces) de l'application, regroupés par
 \hline
 \texttt{SaveCommand} & Exporte tout l'historique du modèle vers un fichier XML via le visiteur XML. \\
 \hline
-\texttt{HelpCommand} & Retourne le texte d'aide listant la syntaxe des commandes disponibles. \\
-\hline
 \texttt{UgrpCommand} & Dissout le groupe situé au rang affiché par \texttt{list} lorsque cet élément est bien un groupe. \\
+\hline
+\texttt{MergeCommand} & Charge deux fichiers XML, les encapsule en groupes et sauvegarde le résultat fusionné dans un troisième fichier. \\
+\hline
+\texttt{V2bmpCommand} & Lance la conversion d'un fichier vectoriel vers une image matricielle via \texttt{V2bmpConverter}. \\
 \hline
 \end{tabular}
 
@@ -294,27 +328,17 @@ Liste des types publics (classes et interfaces) de l'application, regroupés par
 \hline
 \textbf{Entité} & \textbf{Rôle} \\
 \hline
-\texttt{CommandSet} & Contrat d'enregistrement d'un groupe cohérent de commandes dans le registre global. \\
+\texttt{CommandSet} & Contrat d'enregistrement d'un groupe de commandes. \\
 \hline
-\texttt{DrawingCommandSet} & Enregistre les commandes de création de primitives (\texttt{rect}, \texttt{circ}, \texttt{line}, \texttt{elli}). \\
+\texttt{DrawingCommandSet} & Enregistre les commandes de création de formes (\texttt{rect}, \texttt{circ}, \texttt{line}, \texttt{elli}). \\
 \hline
 \texttt{FileCommandSet} & Enregistre les commandes de persistance (\texttt{save}, \texttt{load}). \\
 \hline
-\texttt{GroupCommandSet} & Enregistre les commandes de groupement (\texttt{grp}, \texttt{ugrp}). \\
+\texttt{ShapeGroupCommandSet} & Enregistre les commandes de groupement (\texttt{grp}, \texttt{ugrp}). \\
 \hline
-\texttt{SystemCommandSet} & Enregistre les commandes générales (\texttt{new}, \texttt{list}, \texttt{quit}, \texttt{help}). \\
+\texttt{SystemCommandSet} & Enregistre les commandes générales (\texttt{new}, \texttt{list}, \texttt{quit}). \\
 \hline
-\end{tabular}
-
-\subsection{\protect\texttt{com.drawing.controller.registry}}
-
-\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
-\hline
-\textbf{Entité} & \textbf{Rôle} \\
-\hline
-\texttt{CommandFactory} & Fabrique une instance de \texttt{EditorCommand} à partir des arguments déjà validés. \\
-\hline
-\texttt{CommandRegistry} & Associe chaque verbe à une fabrique qui valide les arguments puis crée la commande correspondante. \\
+\texttt{GroupCommandSet} & Composite de \texttt{CommandSet} : rassemble des ensembles. \\
 \hline
 \end{tabular}
 
@@ -346,7 +370,7 @@ Liste des types publics (classes et interfaces) de l'application, regroupés par
 \hline
 \texttt{XmlLoader} & Parse un fichier XML et recrée les formes dans le modèle en appelant ses méthodes de création. \\
 \hline
-\texttt{XmlVisitor} & Parcourt les \texttt{Drawable} du modèle pour construire un arbre DOM XML prêt à être enregistré sur disque. \\
+\texttt{XmlSaver} & Parcourt les \texttt{Drawable} du modèle pour construire un arbre DOM XML prêt à être enregistré sur disque. \\
 \hline
 \end{tabular}
 
@@ -424,7 +448,11 @@ Liste des types publics (classes et interfaces) de l'application, regroupés par
 \hline
 \textbf{Entité} & \textbf{Rôle} \\
 \hline
-\texttt{App} & Point d'entrée \texttt{main} : instancie le modèle, la vue, le registre de commandes et lance la boucle de l'éditeur en console. \\
+\texttt{EditMain} & Point d'entrée dédié à l'éditeur de dessin. \\
+\hline
+\texttt{MergeMain} & Point d'entrée dédié à la commande \texttt{merge} (fusion de deux dessins XML). \\
+\hline
+\texttt{V2bmpMain} & Point d'entrée dédié à la commande \texttt{v2bmp} (conversion vectoriel vers PNG). \\
 \hline
 \end{tabular}
 
@@ -436,7 +464,7 @@ Liste des types publics (classes et interfaces) de l'application, regroupés par
 \hline
 \texttt{Editor} & Lit les lignes saisies, dispatche le verbe vers le registre et affiche le message renvoyé par la commande exécutée. \\
 \hline
-\texttt{EditorContext} & Regroupe les références partagées (modèle de dessin et fenêtre graphique) passées à chaque commande. \\
+\texttt{CommandCreator} & Interface fonctionnelle de fabrique : crée une \texttt{EditorCommand} à partir des arguments validés. \\
 \hline
 \end{tabular}
 
