@@ -1,4 +1,4 @@
-package com.drawing.controller.registry.validation;
+package com.drawing.controller.validation;
 
 /**
  * Validation des arguments d'une commande (souvent enchaînée via {@link ArgsValidator}).

@@ -5,9 +5,9 @@ import com.drawing.controller.command.ElliCommand;
 import com.drawing.controller.command.LineCommand;
 import com.drawing.controller.command.RectCommand;
 import com.drawing.controller.Editor;
-import com.drawing.controller.registry.validation.ArityValidator;
-import com.drawing.controller.registry.validation.ColorValidator;
-import com.drawing.controller.registry.validation.DoubleValidator;
+import com.drawing.controller.validation.ArityValidator;
+import com.drawing.controller.validation.ColorValidator;
+import com.drawing.controller.validation.DoubleValidator;
 import com.drawing.model.DrawingModel;
 
 /**

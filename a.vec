@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<drawing>
+    <rect color="black" x0="200.0" x1="300.0" y0="200.0" y1="300.0"/>
+    <line color="green" x0="210.0" x1="310.0" y0="210.0" y1="310.0"/>
+    <circ color="red" cx="200.0" cy="200.0" rad="200.0"/>
+</drawing>

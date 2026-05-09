@@ -4,7 +4,7 @@ import com.drawing.controller.command.ListCommand;
 import com.drawing.controller.command.NewCommand;
 import com.drawing.controller.command.QuitCommand;
 import com.drawing.controller.Editor;
-import com.drawing.controller.registry.validation.ArityValidator;
+import com.drawing.controller.validation.ArityValidator;
 import com.drawing.model.DrawingModel;
 
 /**

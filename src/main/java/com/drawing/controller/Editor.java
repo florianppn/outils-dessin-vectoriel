@@ -1,6 +1,6 @@
 package com.drawing.controller;
 
-import com.drawing.controller.registry.validation.Validator;
+import com.drawing.controller.validation.Validator;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -3,6 +3,7 @@ package com.drawing;
 import com.drawing.controller.Editor;
 import com.drawing.controller.commandset.*;
 import com.drawing.model.DrawingModel;
+import com.drawing.view.GraphicViewer;
 
 /**
  * Point d'entrée.
@@ -17,6 +18,7 @@ public class EditMain {
      */
     public static void main(String[] args) {
         DrawingModel model = new DrawingModel();
+        new GraphicViewer(model);
         Editor editor = new Editor("Bienvenue sur l'editeur de dessin !\n");
 
         GroupCommandSet commands = new GroupCommandSet();

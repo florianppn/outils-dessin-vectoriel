@@ -1,4 +1,4 @@
-package com.drawing.controller.registry.validation;
+package com.drawing.controller.validation;
 
 import com.drawing.error.InvalidArgException;
 

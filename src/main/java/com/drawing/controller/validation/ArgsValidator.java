@@ -1,4 +1,4 @@
-package com.drawing.controller.registry.validation;
+package com.drawing.controller.validation;
 
 /**
  * Chaîne de validation : exécute {@link #check(String[])} puis délègue au validateur suivant.

@@ -2,7 +2,7 @@ package com.drawing;
 
 import com.drawing.controller.Editor;
 import com.drawing.controller.command.MergeCommand;
-import com.drawing.controller.registry.validation.ArityValidator;
+import com.drawing.controller.validation.ArityValidator;
 
 /**
  * Point d'entrée.

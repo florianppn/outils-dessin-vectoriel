@@ -3,8 +3,8 @@ package com.drawing.controller.commandset;
 import com.drawing.controller.command.GrpCommand;
 import com.drawing.controller.command.UgrpCommand;
 import com.drawing.controller.Editor;
-import com.drawing.controller.registry.validation.ArityValidator;
-import com.drawing.controller.registry.validation.MinArityValidator;
+import com.drawing.controller.validation.ArityValidator;
+import com.drawing.controller.validation.MinArityValidator;
 import com.drawing.model.DrawingModel;
 
 /**
