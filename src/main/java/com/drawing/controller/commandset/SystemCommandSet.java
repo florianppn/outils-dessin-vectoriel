@@ -5,6 +5,7 @@ import com.drawing.controller.command.NewCommand;
 import com.drawing.controller.command.QuitCommand;
 import com.drawing.controller.Editor;
 import com.drawing.controller.registry.validation.ArityValidator;
+import com.drawing.model.DrawingModel;
 
 /**
  * Commandes générales : {@code new}, {@code list}, {@code quit}, {@code help}.
@@ -16,10 +17,10 @@ public class SystemCommandSet implements CommandSet {
 
         /** {@inheritDoc} */
         @Override
-        public void register(Editor editor) {
-            editor.register("new",  new ArityValidator(0), NewCommand::new);
-            editor.register("list", new ArityValidator(0), ListCommand::new);
-            editor.register("quit", new ArityValidator(0), QuitCommand::new);
+        public void register(Editor editor, DrawingModel drawingModel) {
+            editor.register("new",  new ArityValidator(0), args -> new NewCommand(drawingModel));
+            editor.register("list", new ArityValidator(0), args -> new ListCommand(drawingModel));
+            editor.register("quit", new ArityValidator(0), args -> new QuitCommand());
         }
 
 }

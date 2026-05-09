@@ -15,8 +15,14 @@ import java.util.Scanner;
  */
 public class Editor {
 
+    private static final String DEFAULT_BANNER = "Editeur de dessin vectoriel";
+
     private String text;
     private Map<String, CommandFactory> commands;
+
+    public Editor() {
+        this(DEFAULT_BANNER);
+    }
 
     public Editor(String text) {
         this.text = text;

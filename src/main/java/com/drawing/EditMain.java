@@ -1,12 +1,8 @@
 package com.drawing;
 
 import com.drawing.controller.Editor;
-import com.drawing.controller.EditorContext;
 import com.drawing.controller.commandset.*;
 import com.drawing.model.DrawingModel;
-import com.drawing.view.GraphicViewer;
-
-import java.util.List;
 
 /**
  * Point d'entrée.
@@ -21,15 +17,15 @@ public class EditMain {
      */
     public static void main(String[] args) {
         DrawingModel model = new DrawingModel();
-        GraphicViewer viewer = new GraphicViewer(model);
-        Editor editor = new Editor(new EditorContext(model, viewer));
+        Editor editor = new Editor();
 
-        List.of(
-                new DrawingCommandSet(),
-                new GroupCommandSet(),
-                new FileCommandSet(),
-                new SystemCommandSet()
-        ).forEach(s -> s.register(editor));
+        GroupCommandSet commands = new GroupCommandSet();
+        commands.add(new DrawingCommandSet());
+        commands.add(new ShapeGroupCommandSet());
+        commands.add(new FileCommandSet());
+        commands.add(new SystemCommandSet());
+        
+        commands.register(editor, model);
         editor.run();
     }
     

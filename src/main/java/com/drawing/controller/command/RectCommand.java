@@ -14,7 +14,8 @@ public class RectCommand implements EditorCommand {
     private DrawingModel drawingModel;
     private String[] params;
 
-    public RectCommand(String[] params) {
+    public RectCommand(DrawingModel drawingModel, String[] params) {
+        this.drawingModel = drawingModel;
         this.params = params;
     }
 

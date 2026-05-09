@@ -1,6 +1,7 @@
 package com.drawing.controller.commandset;
 
 import com.drawing.controller.Editor;
+import com.drawing.model.DrawingModel;
 
 /**
  * Interface représentant un ensemble de commandes à enregistrer dans le contrôleur.
@@ -15,6 +16,6 @@ public interface CommandSet {
      *
      * @param editor le contrôleur dans lequel les commandes seront exécutées
      */
-    void register(Editor editor);
+    void register(Editor editor, DrawingModel drawingModel);
 
 }

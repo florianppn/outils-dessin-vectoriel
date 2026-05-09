@@ -4,6 +4,7 @@ import com.drawing.controller.command.LoadCommand;
 import com.drawing.controller.command.SaveCommand;
 import com.drawing.controller.Editor;
 import com.drawing.controller.registry.validation.ArityValidator;
+import com.drawing.model.DrawingModel;
 
 /**
  * Persistance : {@code save}, {@code load}.
@@ -15,9 +16,9 @@ public class FileCommandSet implements CommandSet {
 
     /** {@inheritDoc} */
     @Override
-    public void register(Editor editor) {
-        editor.register("save", new ArityValidator(1), SaveCommand::new);
-        editor.register("load", new ArityValidator(1), LoadCommand::new);
+    public void register(Editor editor, DrawingModel drawingModel) {
+        editor.register("save", new ArityValidator(1), args -> new SaveCommand(drawingModel, args));
+        editor.register("load", new ArityValidator(1), args -> new LoadCommand(drawingModel, args));
     }
 
 }
