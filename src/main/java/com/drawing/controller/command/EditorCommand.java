@@ -1,7 +1,5 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.EditorContext;
-
 /**
  * Action invocable par l'éditeur (ligne de commande). Chaque implémentation
  * exécute une opération via le contexte et renvoie un message pour la console.
@@ -15,9 +13,8 @@ public interface EditorCommand {
      * Exécute l'action de la commande en s'appuyant sur le contexte (modèle, vue, etc.)
      * et renvoie le message à afficher dans la console.
      *
-     * @param ctx contexte d'exécution (modèle de dessin, fenêtre graphique, …)
      * @return texte de retour affiché à l'utilisateur après la commande
      */
-    String execute(EditorContext ctx);
+    String execute();
 
 }

@@ -1,6 +1,5 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.EditorContext;
 import com.drawing.controller.converter.V2bmpConverter;
 
 /**
@@ -11,16 +10,17 @@ import com.drawing.controller.converter.V2bmpConverter;
  */
 public class V2bmpCommand implements EditorCommand {
 
-    private final String[] args;
+    private final String[] params;
 
-    public V2bmpCommand(String[] args) {
-        this.args = args;
+    public V2bmpCommand(String[] params) {
+        this.params = params;
     }
 
+    /** {@inheritDoc} */
     @Override
-    public String execute(EditorContext ctx) {
+    public String execute() {
         try {
-            new V2bmpConverter().convert(args[0], args[1]);
+            new V2bmpConverter().convert(params[0], params[1]);
             return "Conversion réussie.";
         } catch (Exception e) {
             System.err.println("Erreur conversion : " + e.getMessage());

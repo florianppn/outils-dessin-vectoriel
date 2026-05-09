@@ -1,6 +1,5 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.EditorContext;
 import com.drawing.model.DrawingModel;
 
 /**
@@ -11,23 +10,16 @@ import com.drawing.model.DrawingModel;
  */
 public class NewCommand implements EditorCommand {
 
-    private String[] args;
+    private DrawingModel drawingModel;
 
-    /**
-     * @param args aucun argument attendu (tableau éventuellement vide)
-     */
-    public NewCommand(String[] args) {
-        this.args = args;
+    public NewCommand(DrawingModel drawingModel) {
+        this.drawingModel = drawingModel;
     }
 
-    /**
-     * @param ctx contexte contenant le modèle à réinitialiser
-     * @return message de confirmation affiché en console
-     */
+    /** {@inheritDoc} */
     @Override
-    public String execute(EditorContext ctx) {
-        DrawingModel d = ctx.getDrawingModel();
-        d.reset();
+    public String execute() {
+        drawingModel.reset();
         return "Nouveau dessin.";
     }
 

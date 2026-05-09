@@ -1,7 +1,7 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.EditorContext;
 import com.drawing.controller.xml.XmlSaver;
+import com.drawing.model.DrawingModel;
 import com.drawing.model.shape.Drawable;
 
 /**
@@ -12,27 +12,23 @@ import com.drawing.model.shape.Drawable;
  */
 public class SaveCommand implements EditorCommand {
 
-    private String[] args;
+    private DrawingModel drawingModel;
+    private String[] params;
 
-    /**
-     * @param args {@code [0]} chemin du fichier de sortie
-     */
-    public SaveCommand(String[] args) {
-        this.args = args;
+    public SaveCommand(DrawingModel drawingModel, String[] params) {
+        this.drawingModel = drawingModel;
+        this.params = params;
     }
 
-    /**
-     * @param ctx contexte contenant le modèle à exporter
-     * @return message de succès, ou chaîne vide si une erreur a été journalisée sur la sortie erreur
-     */
+    /** {@inheritDoc} */
     @Override
-    public String execute(EditorContext ctx) {
+    public String execute() {
         try {
             XmlSaver saver = new XmlSaver();
-            for (Drawable d : ctx.getDrawingModel().getDrawables()) {
+            for (Drawable d : drawingModel.getDrawables()) {
                 d.accept(saver);
             }
-            saver.save(args[0]);
+            saver.save(params[0]);
             return "Le dessin a bien été sauvegardé.";
         } catch (Exception e) {
             System.err.println("Erreur sauvegarde : " + e.getMessage());

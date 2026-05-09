@@ -1,7 +1,7 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.EditorContext;
 import com.drawing.controller.xml.XmlLoader;
+import com.drawing.model.DrawingModel;
 import com.drawing.model.builder.NormalDrawingBuilder;
 
 /**
@@ -12,25 +12,21 @@ import com.drawing.model.builder.NormalDrawingBuilder;
  */
 public class LoadCommand implements EditorCommand {
 
-    private String[] args;
+    private DrawingModel drawingModel;
+    private String[] params;
 
-    /**
-     * @param args {@code [0]} chemin du fichier XML à lire
-     */
-    public LoadCommand(String[] args) {
-        this.args = args;
+    public LoadCommand(DrawingModel drawingModel, String[] params) {
+        this.drawingModel = drawingModel;
+        this.params = params;
     }
 
-    /**
-     * @param ctx contexte contenant le modèle à remplacer par le contenu du fichier
-     * @return message de succès, ou chaîne vide si le chargement a échoué (erreur sur stderr)
-     */
+    /** {@inheritDoc} */
     @Override
-    public String execute(EditorContext ctx) {
+    public String execute() {
         try {
             NormalDrawingBuilder builder = new NormalDrawingBuilder();
-            new XmlLoader(builder).load(args[0]);
-            ctx.getDrawingModel().setDrawables(builder.getResult());
+            new XmlLoader(builder).load(params[0]);
+            drawingModel.setDrawables(builder.getResult());
             return "Le dessin a bien été chargé.";
         } catch (Exception e) {
             System.err.println("Erreur chargement : " + e.getMessage());

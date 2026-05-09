@@ -1,6 +1,5 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.EditorContext;
 import com.drawing.model.DrawingModel;
 
 /**
@@ -11,30 +10,25 @@ import com.drawing.model.DrawingModel;
  */
 public class GrpCommand implements EditorCommand {
 
-    private String[] args;
+    private DrawingModel drawingModel;
+    private String[] params;
 
-    /**
-     * @param args {@code [0]} libellé du groupe ; {@code [1..]} rangs affichés par {@code list} (1-based)
-     */
-    public GrpCommand(String[] args) {
-        this.args = args;
+    public GrpCommand(DrawingModel drawingModel, String[] params) {
+        this.drawingModel = drawingModel;
+        this.params = params;
     }
 
-    /**
-     * @param ctx contexte contenant le modèle à modifier
-     * @return message de confirmation affiché en console
-     */
+    /** {@inheritDoc} */
     @Override
-    public String execute(EditorContext ctx) {
-        if(args[0].length() > 20) {
+    public String execute() {
+        if(params[0].length() > 20) {
             return "Le nom du groupe ne doit pas faire plus de 20 caractères.";
         }
-        DrawingModel d = ctx.getDrawingModel();
-        int[] ranks = new int[args.length - 1];
-        for (int i = 1; i < args.length; i++) {
-            ranks[i - 1] = Integer.parseInt(args[i]) - 1;
+        int[] ranks = new int[params.length - 1];
+        for (int i = 1; i < params.length; i++) {
+            ranks[i - 1] = Integer.parseInt(params[i]) - 1;
         }
-        d.createGroup(args[0], ranks);
+        drawingModel.createGroup(params[0], ranks);
         return "Le groupe a bien été crée.";
     }
 

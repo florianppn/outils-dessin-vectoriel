@@ -1,6 +1,5 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.EditorContext;
 import com.drawing.util.ColorDecode;
 import com.drawing.model.DrawingModel;
 
@@ -12,28 +11,22 @@ import com.drawing.model.DrawingModel;
  */
 public class CircCommand implements EditorCommand {
 
-    private String[] args;
+    private DrawingModel drawingModel;
+    private String[] params;
 
-    /**
-     * @param args {@code [0]} abscisse centre ; {@code [1]} ordonnée ; {@code [2]} rayon ;
-     *             {@code [3]} nom de couleur
-     */
-    public CircCommand(String[] args) {
-        this.args = args;
+    public CircCommand(DrawingModel drawingModel, String[] params) {
+        this.drawingModel = drawingModel;
+        this.params = params;
     }
 
-    /**
-     * @param ctx contexte contenant le modèle à modifier
-     * @return message de confirmation affiché en console
-     */
+    /** {@inheritDoc} */
     @Override
-    public String execute(EditorContext ctx) {
-        DrawingModel d = ctx.getDrawingModel();
-        d.createCircle(
-            Double.parseDouble(args[0]),
-            Double.parseDouble(args[1]),
-            Double.parseDouble(args[2]),
-            ColorDecode.decode(args[3].toUpperCase())
+    public String execute() {
+        drawingModel.createCircle(
+            Double.parseDouble(params[0]),
+            Double.parseDouble(params[1]),
+            Double.parseDouble(params[2]),
+            ColorDecode.decode(params[3].toUpperCase())
         );
         return "Le cercle a bien été crée.";
     }

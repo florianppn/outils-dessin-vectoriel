@@ -1,6 +1,5 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.EditorContext;
 import com.drawing.util.ColorDecode;
 import com.drawing.model.DrawingModel;
 
@@ -12,28 +11,22 @@ import com.drawing.model.DrawingModel;
  */
 public class RectCommand implements EditorCommand {
 
-    private String[] args;
+    private DrawingModel drawingModel;
+    private String[] params;
 
-    /**
-     * @param args {@code [0..3]} coins opposés (x0, y0, x1, y1) ; {@code [4]} nom de couleur
-     */
-    public RectCommand(String[] args) {
-        this.args = args;
+    public RectCommand(String[] params) {
+        this.params = params;
     }
 
-    /**
-     * @param ctx contexte contenant le modèle à modifier
-     * @return message de confirmation affiché en console
-     */
+    /** {@inheritDoc} */
     @Override
-    public String execute(EditorContext ctx) {
-        DrawingModel d = ctx.getDrawingModel();
-        d.createRectangle(
-            Double.parseDouble(args[0]),
-            Double.parseDouble(args[1]),
-            Double.parseDouble(args[2]),
-            Double.parseDouble(args[3]),
-            ColorDecode.decode(args[4].toUpperCase())
+    public String execute() {
+        drawingModel.createRectangle(
+            Double.parseDouble(params[0]),
+            Double.parseDouble(params[1]),
+            Double.parseDouble(params[2]),
+            Double.parseDouble(params[3]),
+            ColorDecode.decode(params[4].toUpperCase())
         );
         return "Le rectangle a bien été crée.";
     }

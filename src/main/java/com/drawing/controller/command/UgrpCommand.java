@@ -1,6 +1,5 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.EditorContext;
 import com.drawing.model.DrawingModel;
 
 /**
@@ -11,24 +10,19 @@ import com.drawing.model.DrawingModel;
  */
 public class UgrpCommand implements EditorCommand {
 
-    private String[] args;
+    private DrawingModel drawingModel;
+    private String[] params;
 
-    /**
-     * @param args {@code [0]} rang affiché par {@code list} (1 pour la première ligne, etc.)
-     */
-    public UgrpCommand(String[] args) {
-        this.args = args;
+    public UgrpCommand(DrawingModel drawingModel, String[] params) {
+        this.drawingModel = drawingModel;
+        this.params = params;
     }
 
-    /**
-     * @param ctx contexte contenant le modèle à modifier
-     * @return message indiquant succès ou échec (élément non groupe)
-     */
+    /** {@inheritDoc} */
     @Override
-    public String execute(EditorContext ctx) {
-        DrawingModel d = ctx.getDrawingModel();
-        boolean res = d.deleteGroup(
-            Integer.parseInt(args[0])-1
+    public String execute() {
+        boolean res = drawingModel.deleteGroup(
+            Integer.parseInt(params[0])-1
         );
         return res ? "Le groupe a bien été supprimé." : "Ce n'est pas un groupe.";
     }

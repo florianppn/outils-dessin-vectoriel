@@ -1,8 +1,5 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.EditorContext;
-import com.drawing.view.GraphicViewer;
-
 /**
  * Ferme la fenêtre graphique principale (fin de session utilisateur côté UI).
  *
@@ -11,23 +8,10 @@ import com.drawing.view.GraphicViewer;
  */
 public class QuitCommand implements EditorCommand {
 
-    private String[] args;
-
-    /**
-     * @param args aucun argument attendu
-     */
-    public QuitCommand(String[] args) {
-        this.args = args;
-    }
-
-    /**
-     * @param ctx contexte contenant la {@link GraphicViewer} à fermer
-     * @return message d'au revoir affiché en console
-     */
+    /** {@inheritDoc} */
     @Override
-    public String execute(EditorContext ctx) {
-        GraphicViewer graphicViewer = ctx.getGraphicViewer();
-        graphicViewer.quit();
+    public String execute() {
+        System.exit(0);
         return "Au revoir.";
     }
 

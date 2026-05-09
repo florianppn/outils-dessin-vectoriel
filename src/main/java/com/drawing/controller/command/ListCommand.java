@@ -1,6 +1,5 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.EditorContext;
 import com.drawing.model.DrawingModel;
 
 /**
@@ -11,23 +10,16 @@ import com.drawing.model.DrawingModel;
  */
 public class ListCommand implements EditorCommand {
 
-    private String[] args;
+    private DrawingModel drawingModel;
 
-    /**
-     * @param args aucun argument attendu
-     */
-    public ListCommand(String[] args) {
-        this.args = args;
+    public ListCommand(DrawingModel drawingModel) {
+        this.drawingModel = drawingModel;
     }
 
-    /**
-     * @param ctx contexte contenant le modèle à lister
-     * @return résultat de {@link DrawingModel#toString()}
-     */
+    /** {@inheritDoc} */
     @Override
-    public String execute(EditorContext ctx) {
-        DrawingModel d = ctx.getDrawingModel();
-        return d.toString();
+    public String execute() {
+        return drawingModel.toString();
     }
 
 }

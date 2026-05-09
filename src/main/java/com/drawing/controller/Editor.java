@@ -15,24 +15,19 @@ import java.util.Scanner;
  */
 public class Editor {
 
+    private String text;
     private Map<String, CommandFactory> commands;
-    private EditorContext ctx;
 
-    public Editor(EditorContext ctx) {
+    public Editor(String text) {
+        this.text = text;
         this.commands = new HashMap<>();
-        this.ctx = ctx;
-    }
-
-    public Editor() {
-        this.commands = new HashMap<>();
-        this.ctx = null;
     }
 
     /**
      * Lance la boucle de lecture jusqu'à fermeture du flux d'entrée.
      */
     public void run() {
-        System.out.println("Bienvenue dans l'éditeur !\n");
+        System.out.println(text+"\n");
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 System.out.print("> ");
@@ -58,7 +53,7 @@ public class Editor {
         String[] argsCmd = new String[args.length - 1];
         System.arraycopy(args, 1, argsCmd, 0, args.length - 1);
         CommandFactory commandFactory = commands.get(args[0]);
-        return (commandFactory != null) ? commandFactory.create(argsCmd).execute(ctx) : "Cette commande n'existe pas.";
+        return (commandFactory != null) ? commandFactory.create(argsCmd).execute() : "Cette commande n'existe pas.";
     }
 
     /**

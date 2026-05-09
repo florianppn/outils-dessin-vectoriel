@@ -1,7 +1,5 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.EditorContext;
-import com.drawing.controller.merge.DrawingMerger;
 import com.drawing.controller.xml.XmlLoader;
 import com.drawing.controller.xml.XmlSaver;
 import com.drawing.model.builder.NormalDrawingBuilder;
@@ -18,22 +16,22 @@ import java.util.List;
  */
 public class MergeCommand implements EditorCommand {
 
-    private String[] args;
+    private String[] params;
 
-    public MergeCommand(String[] args) {
-        this.args = args;
+    public MergeCommand(String[] params) {
+        this.params = params;
     }
 
+    /** {@inheritDoc} */
     @Override
-    public String execute(EditorContext ctx) {
-        DrawingMerger drawingMerger = new DrawingMerger();
+    public String execute() {
         try {
             XmlSaver saver = new XmlSaver();
-            Group a = new Group(loadDrawables(args[0]), "a");
-            Group b = new Group(loadDrawables(args[1]), "b");
+            Group a = new Group(loadDrawables(params[0]), "a");
+            Group b = new Group(loadDrawables(params[1]), "b");
             saver.visit(a);
             saver.visit(b);
-            saver.save(args[2]);
+            saver.save(params[2]);
             return "La fusion est terminée.";
         } catch (Exception e) {
             System.err.println("Erreur lors de la fusion : " + e.getMessage());
