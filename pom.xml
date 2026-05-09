@@ -39,7 +39,6 @@
                     <windowtitle>Outils dessin vectoriel</windowtitle>
                     <doctitle>Outils dessin vectoriel ${project.version}</doctitle>
                     <show>protected</show>
-                    <!-- évite l'échec du build sur des avertissements doclint (HTML, tags manquants, etc.) -->
                     <doclint>none</doclint>
                 </configuration>
             </plugin>
