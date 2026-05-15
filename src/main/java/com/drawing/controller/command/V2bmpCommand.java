@@ -11,9 +11,11 @@ import com.drawing.controller.validation.Validator;
  */
 public class V2bmpCommand implements EditorCommand {
 
+    private V2bmpConverter converter;
     private Validator validator;
 
-    public V2bmpCommand(Validator validator) {
+    public V2bmpCommand(V2bmpConverter converter, Validator validator) {
+        this.converter = converter;
         this.validator = validator;
     }
 
@@ -22,7 +24,7 @@ public class V2bmpCommand implements EditorCommand {
     public String execute(String[] params) {
         if (!validator.validate(params)) return "Les paramètres ne peuvent pas être traité.";
         try {
-            new V2bmpConverter().convert(params[0], params[1]);
+            converter.convert(params[0], params[1]);
             return "Conversion réussie.";
         } catch (Exception e) {
             return "Erreur conversion : " + e.getMessage();

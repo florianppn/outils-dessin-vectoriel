@@ -14,10 +14,12 @@ import com.drawing.controller.validation.Validator;
 public class SaveCommand implements EditorCommand {
 
     private DrawingModel drawingModel;
+    private XmlSaver saver;
     private Validator validator;
 
-    public SaveCommand(DrawingModel drawingModel, Validator validator) {
+    public SaveCommand(DrawingModel drawingModel, XmlSaver saver, Validator validator) {
         this.drawingModel = drawingModel;
+        this.saver = saver;
         this.validator = validator;
     }
 
@@ -26,7 +28,6 @@ public class SaveCommand implements EditorCommand {
     public String execute(String[] params) {
         if (!validator.validate(params)) return "Les paramètres ne peuvent pas être traité.";
         try {
-            XmlSaver saver = new XmlSaver();
             for (Drawable d : drawingModel.getDrawables()) {
                 d.accept(saver);
             }

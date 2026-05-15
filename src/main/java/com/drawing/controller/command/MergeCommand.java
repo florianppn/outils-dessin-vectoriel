@@ -2,7 +2,7 @@ package com.drawing.controller.command;
 
 import com.drawing.controller.xml.XmlLoader;
 import com.drawing.controller.xml.XmlSaver;
-import com.drawing.model.builder.NormalDrawingBuilder;
+import com.drawing.model.builder.DrawingBuilder;
 import com.drawing.model.shape.Drawable;
 import com.drawing.model.shape.Group;
 import com.drawing.controller.validation.Validator;
@@ -17,9 +17,13 @@ import java.util.List;
  */
 public class MergeCommand implements EditorCommand {
 
+    private DrawingBuilder builder;
+    private XmlLoader loader;
     private Validator validator;
 
-    public MergeCommand(Validator validator) {
+    public MergeCommand(DrawingBuilder builder, XmlLoader loader, Validator validator) {
+        this.builder = builder;
+        this.loader = loader;
         this.validator = validator;
     }
 
@@ -41,8 +45,6 @@ public class MergeCommand implements EditorCommand {
     }
 
     private List<Drawable> loadDrawables(String fileName) throws Exception {
-        NormalDrawingBuilder builder = new NormalDrawingBuilder();
-        XmlLoader loader = new XmlLoader(builder);
         loader.load(fileName);
         return builder.getResult();
     }
