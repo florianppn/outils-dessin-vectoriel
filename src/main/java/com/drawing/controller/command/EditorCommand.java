@@ -13,8 +13,9 @@ public interface EditorCommand {
      * Exécute l'action de la commande en s'appuyant sur le contexte (modèle, vue, etc.)
      * et renvoie le message à afficher dans la console.
      *
+     * @param params de la commande
      * @return texte de retour affiché à l'utilisateur après la commande
      */
-    String execute();
+    String execute(String[] params);
 
 }

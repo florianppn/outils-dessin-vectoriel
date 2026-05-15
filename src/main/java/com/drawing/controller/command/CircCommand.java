@@ -2,6 +2,7 @@ package com.drawing.controller.command;
 
 import com.drawing.util.ColorDecode;
 import com.drawing.model.DrawingModel;
+import com.drawing.controller.validation.Validator;
 
 /**
  * Ajoute un cercle au modèle (centre, rayon, couleur).
@@ -12,16 +13,17 @@ import com.drawing.model.DrawingModel;
 public class CircCommand implements EditorCommand {
 
     private DrawingModel drawingModel;
-    private String[] params;
+    private Validator validator;
 
-    public CircCommand(DrawingModel drawingModel, String[] params) {
+    public CircCommand(DrawingModel drawingModel, Validator validator) {
         this.drawingModel = drawingModel;
-        this.params = params;
+        this.validator = validator;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String execute() {
+    public String execute(String[] params) {
+        if (!validator.validate(params)) return "Les paramètres ne peuvent pas être traité.";
         drawingModel.createCircle(
             Double.parseDouble(params[0]),
             Double.parseDouble(params[1]),

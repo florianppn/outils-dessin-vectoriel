@@ -17,10 +17,9 @@ public class V2bmpMain {
      */
     public static void main(String[] args) {
         Editor editor = new Editor("Bienvenue sur l'editeur de conversion !");
-        editor.register("v2bmp",
-                new ArityValidator(2),
-                V2bmpCommand::new
-        );
+
+        editor.register("v2bmp", new V2bmpCommand(new ArityValidator(2)));
+
         editor.run();
     }
 

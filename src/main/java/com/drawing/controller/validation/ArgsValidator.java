@@ -22,22 +22,21 @@ public abstract class ArgsValidator implements Validator {
         this.next = next;
     }
 
-    /**
-     * @param args arguments de la commande (sans le verbe), passés à tout le maillon de la chaîne
-     */
+    /** {@inheritDoc} */
     @Override
-    public void validate(String[] args) {
-        check(args);
-        if (next != null) {
-            next.validate(args);
-        }
+    public boolean validate(String[] args) {
+        boolean res = check(args);
+        if (res) return res;
+        if (next != null) next.validate(args);
+        return false;
     }
 
     /**
      * Contrôle local sur les arguments (sans appeler explicitement le suivant).
      *
      * @param args arguments de la commande
+     * @return true si valide sinon false
      */
-    public abstract void check(String[] args);
+    public abstract boolean check(String[] args);
 
 }

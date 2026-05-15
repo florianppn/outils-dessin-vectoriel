@@ -1,7 +1,6 @@
 package com.drawing.controller.validation;
 
 import com.drawing.util.ColorDecode;
-import com.drawing.error.InvalidArgException;
 
 /**
  * Vérifie que les arguments aux indices donnés sont des noms de couleur reconnus.
@@ -30,16 +29,14 @@ public class ColorValidator extends ArgsValidator {
         this.positions = positions;
     }
 
-    /**
-     * @param args arguments à valider
-     * @throws com.drawing.error.InvalidArgException si une couleur attendue est inconnue
-     */
+    /** {@inheritDoc} */
     @Override
-    public void check(String[] args) {
+    public boolean check(String[] args) {
         for (int i : positions) {
             boolean isValid = ColorDecode.isValid(args[i].toUpperCase());
-            if (!isValid) throw new InvalidArgException("Ce n'est pas une couleur !");
+            if (!isValid) return false;
         }
+        return true;
     }
 
 }

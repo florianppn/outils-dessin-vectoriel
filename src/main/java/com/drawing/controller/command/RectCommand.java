@@ -2,6 +2,7 @@ package com.drawing.controller.command;
 
 import com.drawing.util.ColorDecode;
 import com.drawing.model.DrawingModel;
+import com.drawing.controller.validation.Validator;
 
 /**
  * Ajoute un rectangle au modèle à partir de coordonnées et d'une couleur nommée.
@@ -12,16 +13,17 @@ import com.drawing.model.DrawingModel;
 public class RectCommand implements EditorCommand {
 
     private DrawingModel drawingModel;
-    private String[] params;
+    private Validator validator;
 
-    public RectCommand(DrawingModel drawingModel, String[] params) {
+    public RectCommand(DrawingModel drawingModel, Validator validator) {
         this.drawingModel = drawingModel;
-        this.params = params;
+        this.validator = validator;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String execute() {
+    public String execute(String[] params) {
+        if (!validator.validate(params)) return "Les paramètres ne peuvent pas être traité.";
         drawingModel.createRectangle(
             Double.parseDouble(params[0]),
             Double.parseDouble(params[1]),

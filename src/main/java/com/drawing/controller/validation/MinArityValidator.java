@@ -1,7 +1,5 @@
 package com.drawing.controller.validation;
 
-import com.drawing.error.InvalidArgException;
-
 /**
  * Vérifie qu'il y a au moins {@code min} arguments.
  *
@@ -29,14 +27,12 @@ public class MinArityValidator extends ArgsValidator {
         this.min = min;
     }
 
-    /**
-     * @param args arguments à valider
-     * @throws com.drawing.error.InvalidArgException si {@code args.length < min}
-     */
+    /** {@inheritDoc} */
     @Override
-    public void check(String[] args) {
+    public boolean check(String[] args) {
         if (args.length < min) {
-            throw new InvalidArgException("Trop élevé !");
+           return false;
         }
+        return true;
     }
 }

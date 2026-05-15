@@ -2,6 +2,7 @@ package com.drawing.controller.command;
 
 import com.drawing.util.ColorDecode;
 import com.drawing.model.DrawingModel;
+import com.drawing.controller.validation.Validator;
 
 /**
  * Ajoute une ellipse au modèle (centre, demi-axes, couleur).
@@ -12,16 +13,17 @@ import com.drawing.model.DrawingModel;
 public class ElliCommand implements EditorCommand {
 
     private DrawingModel drawingModel;
-    private String[] params;
+    private Validator validator;
 
-    public ElliCommand(DrawingModel drawingModel, String[] params) {
+    public ElliCommand(DrawingModel drawingModel, Validator validator) {
         this.drawingModel = drawingModel;
-        this.params = params;
+        this.validator = validator;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String execute() {
+    public String execute(String[] params) {
+        if (!validator.validate(params)) return "Les paramètres ne peuvent pas être traité.";
         drawingModel.createEllipse(
             Double.parseDouble(params[0]),
             Double.parseDouble(params[1]),

@@ -1,6 +1,6 @@
 package com.drawing.controller;
 
-import com.drawing.controller.validation.Validator;
+import com.drawing.controller.command.EditorCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class Editor {
 
     private String text;
-    private Map<String, CommandCreator> commands;
+    private Map<String, EditorCommand> commands;
 
     public Editor(String text) {
         this.text = text;
@@ -51,8 +51,8 @@ public class Editor {
     public String handleLine(String[] args) {
         String[] argsCmd = new String[args.length - 1];
         System.arraycopy(args, 1, argsCmd, 0, args.length - 1);
-        CommandCreator commandCreator = commands.get(args[0]);
-        return (commandCreator != null) ? commandCreator.create(argsCmd).execute() : "Cette commande n'existe pas.";
+        EditorCommand command = commands.get(args[0]);
+        return (command != null) ? command.execute(argsCmd) : "Cette commande n'existe pas.";
     }
 
     /**
@@ -62,11 +62,8 @@ public class Editor {
      * @param validator chaîne ou validateur unique pour les arguments
      * @param creator création de la commande après validation
      */
-    public void register(String verb, Validator validator, CommandCreator creator) {
-        commands.put(verb, args -> {
-            validator.validate(args);
-            return creator.create(args);
-        });
+    public void register(String verb, EditorCommand command) {
+        commands.put(verb, command);
     }
 
 }

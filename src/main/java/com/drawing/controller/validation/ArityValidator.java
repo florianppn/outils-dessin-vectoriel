@@ -1,6 +1,5 @@
 package com.drawing.controller.validation;
 
-import com.drawing.error.InvalidArgException;
 
 /**
  * Vérifie que le nombre d'arguments est exactement celui attendu.
@@ -29,15 +28,13 @@ public class ArityValidator extends ArgsValidator {
         this.expected = expected;
     }
 
-    /**
-     * @param args arguments à valider
-     * @throws com.drawing.error.InvalidArgException si {@code args.length != expected}
-     */
+    /** {@inheritDoc} */
     @Override
-    public void check(String[] args) {
+    public boolean check(String[] args) {
         if (args.length != expected) {
-            throw new InvalidArgException("Pas le bon nombre d'arguments !");
+            return false;
         }
+        return true;
     }
 
 }

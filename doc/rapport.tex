@@ -219,45 +219,7 @@ Product & \texttt{List<Drawable>} \\
 
 \newpage
 
-\section{Patron de conception Composite et Fabrique}
 
-\subsection{Motivation}
-
-Les commandes de l'éditeur sont organisées par famille (\texttt{DrawingCommandSet}, \texttt{ShapeGroupCommandSet}, \texttt{FileCommandSet}, \texttt{SystemCommandSet}). Le \texttt{GroupCommandSet} rassemble ces ensembles et permet de les enregistrer en une seule fois.\\
-
-La création des commandes repose sur l'interface fonctionnelle \texttt{CommandCreator} : chaque verbe est associé à une fabrique (\texttt{create(String[] args)}) stockée dans une map de l'\texttt{Editor}.\\
-
-À la compilation, les lambdas passées à \texttt{register(...)} sont résolues en \texttt{CommandCreator}, puis utilisées à l'exécution pour instancier la bonne \texttt{EditorCommand}.
-
-\subsection{Correspondance des acteurs}
-
-\begin{tabular}{|>{\raggedright\arraybackslash}p{0.34\textwidth}|p{0.54\textwidth}|}
-\hline
-\textbf{Acteur du pattern} & \textbf{Entité dans l'application} \\
-\hline
-Component (Composite) & \texttt{CommandSet} \\
-\hline
-Leaf (Composite) & \texttt{DrawingCommandSet}, \texttt{ShapeGroupCommandSet}, \texttt{FileCommandSet}, \texttt{SystemCommandSet} \\
-\hline
-Composite & \texttt{GroupCommandSet} \\
-\hline
-Client (Composite) & \texttt{EditMain} \\
-\hline
-Creator (Fabrique) & \texttt{CommandCreator} \\
-\hline
-ConcreteCreator (Fabrique) & Lambdas enregistrées dans les \texttt{CommandSet} \\
-\hline
-Product (Fabrique) & \texttt{EditorCommand} \\
-\hline
-Contexte de résolution & \texttt{Editor} via \texttt{Map<String, CommandCreator>} \\
-\hline
-\end{tabular}
-
-\begin{center}
-\includegraphics[width=1\textwidth]{images/UML/commandset.jpg}
-\end{center}
-
-\newpage
 
 \section{DTD XML}
 
@@ -319,26 +281,6 @@ Liste des types publics (classes et interfaces) de l'application, regroupés par
 \texttt{MergeCommand} & Charge deux fichiers XML, les encapsule en groupes et sauvegarde le résultat fusionné dans un troisième fichier. \\
 \hline
 \texttt{V2bmpCommand} & Lance la conversion d'un fichier vectoriel vers une image matricielle via \texttt{V2bmpConverter}. \\
-\hline
-\end{tabular}
-
-\subsection{\protect\texttt{com.drawing.controller.commandset}}
-
-\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
-\hline
-\textbf{Entité} & \textbf{Rôle} \\
-\hline
-\texttt{CommandSet} & Contrat d'enregistrement d'un groupe de commandes. \\
-\hline
-\texttt{DrawingCommandSet} & Enregistre les commandes de création de formes (\texttt{rect}, \texttt{circ}, \texttt{line}, \texttt{elli}). \\
-\hline
-\texttt{FileCommandSet} & Enregistre les commandes de persistance (\texttt{save}, \texttt{load}). \\
-\hline
-\texttt{ShapeGroupCommandSet} & Enregistre les commandes de groupement (\texttt{grp}, \texttt{ugrp}). \\
-\hline
-\texttt{SystemCommandSet} & Enregistre les commandes générales (\texttt{new}, \texttt{list}, \texttt{quit}). \\
-\hline
-\texttt{GroupCommandSet} & Composite de \texttt{CommandSet} : rassemble des ensembles. \\
 \hline
 \end{tabular}
 
@@ -463,8 +405,6 @@ Liste des types publics (classes et interfaces) de l'application, regroupés par
 \textbf{Entité} & \textbf{Rôle} \\
 \hline
 \texttt{Editor} & Lit les lignes saisies, dispatche le verbe vers le registre et affiche le message renvoyé par la commande exécutée. \\
-\hline
-\texttt{CommandCreator} & Interface fonctionnelle de fabrique : crée une \texttt{EditorCommand} à partir des arguments validés. \\
 \hline
 \end{tabular}
 

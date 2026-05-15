@@ -19,7 +19,8 @@ public interface Validator {
      * Vérifie les arguments ; lève une {@link com.drawing.error.InvalidArgException} en cas d'échec.
      *
      * @param args arguments de la commande (sans le verbe)
+     * @return true si validé sinon false.
      */
-    void validate(String[] args);
+    boolean validate(String[] args);
 
 }

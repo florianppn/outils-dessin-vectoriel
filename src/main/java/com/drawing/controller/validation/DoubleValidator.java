@@ -1,7 +1,5 @@
 package com.drawing.controller.validation;
 
-import com.drawing.error.InvalidArgException;
-
 /**
  * Vérifie que les arguments aux indices donnés sont des nombres décimaux valides.
  *
@@ -29,19 +27,17 @@ public class DoubleValidator extends ArgsValidator {
         this.positions = positions;
     }
 
-    /**
-     * @param args arguments à valider
-     * @throws com.drawing.error.InvalidArgException si un token n'est pas un nombre décimal valide
-     */
+    /** {@inheritDoc} */
     @Override
-    public void check(String[] args) {
+    public boolean check(String[] args) {
         try {
             for (int position : positions) {
                 Double.parseDouble(args[position]);
             }
         } catch (NumberFormatException e) {
-            throw new InvalidArgException("Double attendu");
+            return false;
         }
+        return true;
     }
 
 }

@@ -5,6 +5,7 @@ import com.drawing.controller.xml.XmlSaver;
 import com.drawing.model.builder.NormalDrawingBuilder;
 import com.drawing.model.shape.Drawable;
 import com.drawing.model.shape.Group;
+import com.drawing.controller.validation.Validator;
 
 import java.util.List;
 
@@ -16,15 +17,16 @@ import java.util.List;
  */
 public class MergeCommand implements EditorCommand {
 
-    private String[] params;
+    private Validator validator;
 
-    public MergeCommand(String[] params) {
-        this.params = params;
+    public MergeCommand(Validator validator) {
+        this.validator = validator;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String execute() {
+    public String execute(String[] params) {
+        if (!validator.validate(params)) return "Les paramètres ne peuvent pas être traité.";
         try {
             XmlSaver saver = new XmlSaver();
             Group a = new Group(loadDrawables(params[0]), "a");
@@ -34,8 +36,7 @@ public class MergeCommand implements EditorCommand {
             saver.save(params[2]);
             return "La fusion est terminée.";
         } catch (Exception e) {
-            System.err.println("Erreur lors de la fusion : " + e.getMessage());
-            return "";
+            return "Erreur lors de la fusion : " + e.getMessage();
         }
     }
 

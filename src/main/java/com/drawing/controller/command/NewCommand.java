@@ -1,6 +1,7 @@
 package com.drawing.controller.command;
 
 import com.drawing.model.DrawingModel;
+import com.drawing.controller.validation.Validator;
 
 /**
  * Vide le modèle (nouveau dessin vierge).
@@ -11,14 +12,17 @@ import com.drawing.model.DrawingModel;
 public class NewCommand implements EditorCommand {
 
     private DrawingModel drawingModel;
+    private Validator validator;
 
-    public NewCommand(DrawingModel drawingModel) {
+    public NewCommand(DrawingModel drawingModel, Validator validator) {
         this.drawingModel = drawingModel;
+        this.validator = validator;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String execute() {
+    public String execute(String[] params) {
+        if (!validator.validate(params)) return "Les paramètres ne peuvent pas être traité.";
         drawingModel.reset();
         return "Nouveau dessin.";
     }

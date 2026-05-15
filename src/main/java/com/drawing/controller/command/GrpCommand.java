@@ -1,6 +1,7 @@
 package com.drawing.controller.command;
 
 import com.drawing.model.DrawingModel;
+import com.drawing.controller.validation.Validator;
 
 /**
  * Regroupe plusieurs formes de l'historique courant dans un {@link com.drawing.model.shape.Group}.
@@ -11,16 +12,17 @@ import com.drawing.model.DrawingModel;
 public class GrpCommand implements EditorCommand {
 
     private DrawingModel drawingModel;
-    private String[] params;
+    private Validator validator;
 
-    public GrpCommand(DrawingModel drawingModel, String[] params) {
+    public GrpCommand(DrawingModel drawingModel, Validator validator) {
         this.drawingModel = drawingModel;
-        this.params = params;
+        this.validator = validator;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String execute() {
+    public String execute(String[] params) {
+        if (!validator.validate(params)) return "Les paramètres ne peuvent pas être traité.";
         if(params[0].length() > 20) {
             return "Le nom du groupe ne doit pas faire plus de 20 caractères.";
         }

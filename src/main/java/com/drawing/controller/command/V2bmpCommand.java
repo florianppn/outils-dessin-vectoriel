@@ -1,6 +1,7 @@
 package com.drawing.controller.command;
 
 import com.drawing.controller.converter.V2bmpConverter;
+import com.drawing.controller.validation.Validator;
 
 /**
  * Commande de conversion d'un dessin vectoriel (.vec) en image matricielle (.png).
@@ -10,21 +11,21 @@ import com.drawing.controller.converter.V2bmpConverter;
  */
 public class V2bmpCommand implements EditorCommand {
 
-    private final String[] params;
+    private Validator validator;
 
-    public V2bmpCommand(String[] params) {
-        this.params = params;
+    public V2bmpCommand(Validator validator) {
+        this.validator = validator;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String execute() {
+    public String execute(String[] params) {
+        if (!validator.validate(params)) return "Les paramètres ne peuvent pas être traité.";
         try {
             new V2bmpConverter().convert(params[0], params[1]);
             return "Conversion réussie.";
         } catch (Exception e) {
-            System.err.println("Erreur conversion : " + e.getMessage());
-            return "Echec de la conversion.";
+            return "Erreur conversion : " + e.getMessage();
         }
     }
 

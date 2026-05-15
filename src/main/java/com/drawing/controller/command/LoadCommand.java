@@ -3,6 +3,7 @@ package com.drawing.controller.command;
 import com.drawing.controller.xml.XmlLoader;
 import com.drawing.model.DrawingModel;
 import com.drawing.model.builder.NormalDrawingBuilder;
+import com.drawing.controller.validation.Validator;
 
 /**
  * Réinitialise le modèle puis charge un dessin depuis un fichier XML.
@@ -13,24 +14,24 @@ import com.drawing.model.builder.NormalDrawingBuilder;
 public class LoadCommand implements EditorCommand {
 
     private DrawingModel drawingModel;
-    private String[] params;
+    private Validator validator;
 
-    public LoadCommand(DrawingModel drawingModel, String[] params) {
+    public LoadCommand(DrawingModel drawingModel, Validator validator) {
         this.drawingModel = drawingModel;
-        this.params = params;
+        this.validator = validator;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String execute() {
+    public String execute(String[] params) {
+        if (!validator.validate(params)) return "Les paramètres ne peuvent pas être traité.";
         try {
             NormalDrawingBuilder builder = new NormalDrawingBuilder();
             new XmlLoader(builder).load(params[0]);
             drawingModel.setDrawables(builder.getResult());
             return "Le dessin a bien été chargé.";
         } catch (Exception e) {
-            System.err.println("Erreur chargement : " + e.getMessage());
-            return "";
+            return "Erreur chargement : " + e.getMessage();
         }
     }
 
