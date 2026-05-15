@@ -11,16 +11,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 
 /**
- * Lit un fichier XML de dessin et délègue la construction des formes à un builder.
+ * Lit un fichier XML de dessin et délègue la construction des formes à un builder (Director).
  *
  * @author Florian Pépin
  * @version 1.0
  */
 public class XmlLoader {
 
-    /**
-     * Builder utilisé pour construire le dessin à partir des éléments du fichier XML.
-     */
     private DrawingBuilder drawingBuilder;
 
     /**
@@ -37,6 +34,7 @@ public class XmlLoader {
      * @throws Exception erreur d'accès fichier, parse XML ou attributs invalides
      */
     public void load(String fileName) throws Exception {
+        drawingBuilder.reset();
         Document doc = DocumentBuilderFactory.newInstance()
                 .newDocumentBuilder()
                 .parse(new File(fileName));
@@ -52,36 +50,52 @@ public class XmlLoader {
 
             Element e = (Element) node;
             switch (e.getTagName()) {
-                case "rect" -> drawingBuilder.setRectangle(
-                    Double.parseDouble(e.getAttribute("x0")),
-                    Double.parseDouble(e.getAttribute("y0")),
-                    Double.parseDouble(e.getAttribute("x1")),
-                    Double.parseDouble(e.getAttribute("y1")),
-                    ColorDecode.decode(e.getAttribute("color"))
-                );
-                case "circ" -> drawingBuilder.setCircle(
-                    Double.parseDouble(e.getAttribute("cx")),
-                    Double.parseDouble(e.getAttribute("cy")),
-                    Double.parseDouble(e.getAttribute("rad")),
-                    ColorDecode.decode(e.getAttribute("color"))
-                );
-                case "line" -> drawingBuilder.setLine(
-                    Double.parseDouble(e.getAttribute("x0")),
-                    Double.parseDouble(e.getAttribute("y0")),
-                    Double.parseDouble(e.getAttribute("x1")),
-                    Double.parseDouble(e.getAttribute("y1")),
-                    ColorDecode.decode(e.getAttribute("color"))
-                );
-                case "elli" -> drawingBuilder.setEllipse(
-                    Double.parseDouble(e.getAttribute("x")),
-                    Double.parseDouble(e.getAttribute("y")),
-                    Double.parseDouble(e.getAttribute("rx")),
-                    Double.parseDouble(e.getAttribute("ry")),
-                    ColorDecode.decode(e.getAttribute("color"))
-                );
+                case "rect" -> parseRect(e);
+                case "circ" -> parseCircle(e);
+                case "line" -> parseLine(e);
+                case "elli" -> parseEllipse(e);
                 case "group" -> parseGroup(e);
             }
         }
+    }
+
+    private void parseRect(Element e) {
+        drawingBuilder.beginRectangle();
+        drawingBuilder.setX0(Double.parseDouble(e.getAttribute("x0")));
+        drawingBuilder.setY0(Double.parseDouble(e.getAttribute("y0")));
+        drawingBuilder.setX1(Double.parseDouble(e.getAttribute("x1")));
+        drawingBuilder.setY1(Double.parseDouble(e.getAttribute("y1")));
+        drawingBuilder.setColor(ColorDecode.decode(e.getAttribute("color")));
+        drawingBuilder.build();
+    }
+
+    private void parseCircle(Element e) {
+        drawingBuilder.beginCircle();
+        drawingBuilder.setCx(Double.parseDouble(e.getAttribute("cx")));
+        drawingBuilder.setCy(Double.parseDouble(e.getAttribute("cy")));
+        drawingBuilder.setRadius(Double.parseDouble(e.getAttribute("rad")));
+        drawingBuilder.setColor(ColorDecode.decode(e.getAttribute("color")));
+        drawingBuilder.build();
+    }
+
+    private void parseLine(Element e) {
+        drawingBuilder.beginLine();
+        drawingBuilder.setX0(Double.parseDouble(e.getAttribute("x0")));
+        drawingBuilder.setY0(Double.parseDouble(e.getAttribute("y0")));
+        drawingBuilder.setX1(Double.parseDouble(e.getAttribute("x1")));
+        drawingBuilder.setY1(Double.parseDouble(e.getAttribute("y1")));
+        drawingBuilder.setColor(ColorDecode.decode(e.getAttribute("color")));
+        drawingBuilder.build();
+    }
+
+    private void parseEllipse(Element e) {
+        drawingBuilder.beginEllipse();
+        drawingBuilder.setCenterX(Double.parseDouble(e.getAttribute("x")));
+        drawingBuilder.setCenterY(Double.parseDouble(e.getAttribute("y")));
+        drawingBuilder.setRx(Double.parseDouble(e.getAttribute("rx")));
+        drawingBuilder.setRy(Double.parseDouble(e.getAttribute("ry")));
+        drawingBuilder.setColor(ColorDecode.decode(e.getAttribute("color")));
+        drawingBuilder.build();
     }
 
     private void parseGroup(Element groupEl) {

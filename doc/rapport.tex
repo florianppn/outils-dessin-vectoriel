@@ -193,7 +193,7 @@ Client & \texttt{Les différentes commandes} \\
 
 Le chargement XML reconstruit un dessin potentiellement imbriqué (groupes dans des groupes). Le patron Monteur permet de séparer la logique de parcours du document XML (directeur) de la logique de construction du produit final (builder).\\
 
-\texttt{XmlLoader} lit les balises et exécute les étapes de construction (\texttt{startGroup}, \texttt{setRectangle}, \texttt{endGroup}, etc.) sans connaître la représentation finale en détail.\\
+\texttt{XmlLoader} lit les balises et exécute les étapes de construction (\texttt{startGroup}, \texttt{setRy()}, \texttt{setCenterY()}, etc.) sans connaître la représentation finale en détail.\\
 
 \texttt{NormalDrawingBuilder} encapsule la création concrète des \texttt{Drawable} et la gestion de la pile de groupes.
 
@@ -220,7 +220,6 @@ Client & \texttt{MergeCommand} et \texttt{LoadCommand} \\
 \end{center}
 
 \newpage
-
 
 
 \section{DTD XML}
@@ -268,7 +267,7 @@ Liste des types publics (classes et interfaces) de l'application, regroupés par
 \hline
 \texttt{ListCommand} & Retourne la représentation texte numérotée de l'historique des formes du modèle. \\
 \hline
-\texttt{LoadCommand} & Réinitialise le modèle puis le remplit en lisant un fichier XML conforme au format d'échange. \\
+\texttt{LoadCommand} & Charge un dessin depuis un fichier XML via \texttt{XmlLoader} et le builder, puis remplace l'historique du modèle. \\
 \hline
 \texttt{NewCommand} & Vide l'historique du modèle pour repartir d'un dessin vierge. \\
 \hline
@@ -300,21 +299,9 @@ Liste des types publics (classes et interfaces) de l'application, regroupés par
 \hline
 \texttt{MinArityValidator} & Vérifie qu'au moins le nombre minimal requis d'arguments est présent. \\
 \hline
-\texttt{DoubleValidator} & Vérifie que les arguments aux indices donnés sont des nombres décimaux syntaxiquement valides. \\
+\texttt{DoubleValidator} & Vérifie que les arguments aux indices donnés sont des nombres décimaux valides. \\
 \hline
 \texttt{ColorValidator} & Vérifie que les arguments aux indices donnés sont des noms de couleur reconnus par l'application. \\
-\hline
-\end{tabular}
-
-\subsection{\protect\texttt{com.drawing.controller.xml}}
-
-\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
-\hline
-\textbf{Entité} & \textbf{Rôle} \\
-\hline
-\texttt{XmlLoader} & Parse un fichier XML et recrée les formes dans le modèle en appelant ses méthodes de création. \\
-\hline
-\texttt{XmlSaver} & Parcourt les \texttt{Drawable} du modèle pour construire un arbre DOM XML prêt à être enregistré sur disque. \\
 \hline
 \end{tabular}
 
@@ -324,7 +311,7 @@ Liste des types publics (classes et interfaces) de l'application, regroupés par
 \hline
 \textbf{Entité} & \textbf{Rôle} \\
 \hline
-\texttt{InvalidArgException} & Exception levée lorsqu'un argument de commande ou de validation est refusé. \\
+\texttt{InvalidArgException} & Exception personnalisé utile principalement pour les arguments de couleurs. \\
 \hline
 \end{tabular}
 
@@ -357,6 +344,42 @@ Liste des types publics (classes et interfaces) de l'application, regroupés par
 \texttt{Ellipse} & Modélise une ellipse par centre, demi-axes et couleur. \\
 \hline
 \texttt{Group} & Modélise un composite regroupant plusieurs \texttt{Drawable} sous un nom. \\
+\hline
+\end{tabular}
+
+\subsection{\protect\texttt{com.drawing.model.builder}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{DrawingBuilder} & Contrat du builder : construction par étapes (\texttt{begin*} $\rightarrow$ setters $\rightarrow$ \texttt{build()}) et gestion des groupes imbriqués. \\
+\hline
+\texttt{NormalDrawingBuilder} & Implémentation concrète du builder avec état \texttt{ShapeKind} et pile de groupes. \\
+\hline
+\texttt{ShapeKind} & Énumération du type de forme en cours de construction (\texttt{NONE}, rectangle, cercle, ligne, ellipse). \\
+\hline
+\end{tabular}
+
+\subsection{\protect\texttt{com.drawing.model.xml}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{XmlLoader} & parse le XML et pilote le \texttt{DrawingBuilder} pour construire les formes. \\
+\hline
+\texttt{XmlSaver} & parcourt les \texttt{Drawable} et construit un arbre DOM XML. \\
+\hline
+\end{tabular}
+
+\subsection{\protect\texttt{com.drawing.model.converter}}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.36\textwidth}|p{0.56\textwidth}|}
+\hline
+\textbf{Entité} & \textbf{Rôle} \\
+\hline
+\texttt{V2bmpConverter} & charge un fichier \texttt{.vec} via \texttt{XmlLoader} et rasterise le dessin en image PNG. \\
 \hline
 \end{tabular}
 
