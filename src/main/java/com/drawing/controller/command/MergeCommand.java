@@ -33,6 +33,7 @@ public class MergeCommand implements EditorCommand {
         if (!validator.validate(params)) return "Les paramètres ne peuvent pas être traité.";
         try {
             XmlSaver saver = new XmlSaver();
+            saver.reset();
             Group a = new Group(loadDrawables(params[0]), "a");
             Group b = new Group(loadDrawables(params[1]), "b");
             saver.visit(a);

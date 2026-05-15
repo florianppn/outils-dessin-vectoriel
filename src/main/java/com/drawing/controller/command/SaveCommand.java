@@ -28,6 +28,7 @@ public class SaveCommand implements EditorCommand {
     public String execute(String[] params) {
         if (!validator.validate(params)) return "Les paramètres ne peuvent pas être traité.";
         try {
+            saver.reset();
             for (Drawable d : drawingModel.getDrawables()) {
                 d.accept(saver);
             }

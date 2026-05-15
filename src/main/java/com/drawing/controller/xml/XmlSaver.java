@@ -26,17 +26,19 @@ public class XmlSaver implements DrawingVisitor {
     private Element current;
 
     /**
-     * Initialise un document vide avec l'élément racine {@code drawing}.
-     *
-     * @throws ParserConfigurationException si la fabrique de parseur XML ne peut pas être créée
+     * Prépare un nouveau document vide avec l'élément racine {@code drawing}.
      */
-    public XmlSaver() throws ParserConfigurationException {
-        doc = DocumentBuilderFactory.newInstance()
-                .newDocumentBuilder()
-                .newDocument();
-        Element root = doc.createElement("drawing");
-        doc.appendChild(root);
-        current = root;
+    public void reset() {
+        try {
+            doc = DocumentBuilderFactory.newInstance()
+                    .newDocumentBuilder()
+                    .newDocument();
+            Element root = doc.createElement("drawing");
+            doc.appendChild(root);
+            current = root;
+        } catch (ParserConfigurationException e) {
+            throw new IllegalStateException("Impossible de créer le document XML", e);
+        }
     }
 
     /**

@@ -2,7 +2,6 @@ package com.drawing;
 
 import com.drawing.controller.Editor;
 import com.drawing.controller.command.*;
-import com.drawing.controller.converter.V2bmpConverter;
 import com.drawing.controller.validation.*;
 import com.drawing.controller.xml.*;
 import com.drawing.model.DrawingModel;
@@ -25,7 +24,6 @@ public class EditMain {
         DrawingBuilder builder = new NormalDrawingBuilder();
         XmlLoader loader = new XmlLoader(builder);
         XmlSaver saver = new XmlSaver();
-        V2bmpConverter converter = new V2bmpConverter();
 
         Editor editor = new Editor("Bienvenue sur l'editeur de dessin !\n");
         
