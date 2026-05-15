@@ -3,7 +3,7 @@ package com.drawing;
 import com.drawing.controller.Editor;
 import com.drawing.controller.command.*;
 import com.drawing.controller.validation.*;
-import com.drawing.controller.xml.*;
+import com.drawing.model.xml.*;
 import com.drawing.model.DrawingModel;
 import com.drawing.model.builder.*;
 import com.drawing.view.GraphicViewer;

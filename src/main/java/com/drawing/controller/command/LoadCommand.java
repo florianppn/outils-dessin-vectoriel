@@ -1,6 +1,6 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.xml.XmlLoader;
+import com.drawing.model.xml.XmlLoader;
 import com.drawing.model.DrawingModel;
 import com.drawing.model.builder.DrawingBuilder;
 import com.drawing.controller.validation.Validator;

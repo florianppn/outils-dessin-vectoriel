@@ -71,7 +71,7 @@ ConcreteCommand & \texttt{RectCommand}, \texttt{CircCommand}, \texttt{SaveComman
 \hline
 Invoker & \texttt{Editor} \\
 \hline
-Receiver & \texttt{DrawingModel} \\
+Receiver & \texttt{DrawingModel, V2bmpConverter, XmlSaver, XmlLoader et DrawingBuilder} \\
 \hline
 \end{tabular}
 
@@ -127,7 +127,7 @@ Leaf & \texttt{Rectangle}, \texttt{Circle}, \texttt{Line}, \texttt{Ellipse} \\
 \hline
 Composite & \texttt{Group} \\
 \hline
-Client & \texttt{DrawingModel}, \texttt{XmlSaver}, \texttt{GraphicViewer} \\
+Client & \texttt{DrawingModel}, \texttt{XmlSaver}, \texttt{GraphicViewer}, \texttt{DrawingBuilder} et \texttt{V2bmpConverter} \\
 \hline
 \end{tabular}
 
@@ -143,13 +143,13 @@ Le modèle contient différentes formes (\texttt{Rectangle}, \texttt{Circle}, \t
 \hline
 Visitor & \texttt{DrawingVisitor} \\
 \hline
-ConcreteVisitor & \texttt{GraphicViewer}, \texttt{XmlSaver} \\
+ConcreteVisitor & \texttt{GraphicViewer}, \texttt{XmlSaver} et \texttt{V2bmpConverter} \\
 \hline
 Element & \texttt{Drawable} \\
 \hline
 ConcreteElement & \texttt{Rectangle}, \texttt{Circle}, \texttt{Line}, \texttt{Ellipse}, \texttt{Group} \\
 \hline
-ObjectStructure & \texttt{DrawingModel} \\
+ObjectStructure & \texttt{DrawingModel} (liste racine) et \texttt{Group} imbriqués (listes d’enfants)\\
 \hline
 \end{tabular}
 
@@ -177,7 +177,7 @@ AbstractHandler & \texttt{ArgsValidator} \\
 \hline
 ConcreteHandler & \texttt{ArityValidator}, \texttt{MinArityValidator}, \texttt{DoubleValidator}, \texttt{ColorValidator} \\
 \hline
-Client & \texttt{Editor} \\
+Client & \texttt{Les différentes commandes} \\
 \hline
 \end{tabular}
 
@@ -211,6 +211,8 @@ Concrete Builder & \texttt{NormalDrawingBuilder} \\
 \hline
 Product & \texttt{List<Drawable>} \\
 \hline
+Client & \texttt{MergeCommand} et \texttt{LoadCommand} \\
+\hline
 \end{tabular}
 
 \begin{center}
@@ -231,14 +233,14 @@ Product & \texttt{List<Drawable>} \\
 
 L'application adopte une architecture MVC (Modèle - Vue - Controleur).\\
 Cette architecture applique une séparation des responsabilités avec le modèle (\texttt{DrawingModel}, formes et groupe) qui concentre l'état et les règles métier.\\
-Les différents contrôleurs (\texttt{Editor}, commandes, registre et validation) orchestre les entrées utilisateur sans implémenter le rendu ni la persistance XML.\\
+Les différents contrôleurs (\texttt{Editor}, commandes et validation) orchestre les entrées utilisateur sans implémenter le rendu ni la persistance des données.\\
 La vue (\texttt{GraphicViewer}) ne fait qu'afficher et réagit aux changements via le pattern Observeur.\\\\
 
-Le principe de responsabilité unique se lit dans le découpage des commandes (\texttt{EditorCommand} et sous-classes), des validateurs de la chaîne de responsabilité et des visiteurs (\texttt{XmlSaver}, \texttt{GraphicViewer}).\\
-Le principe ouvert/fermé se retrouve notamment via le Visiteur et le Composite puisqu'ajouter une opération sur les formes (export, affichage) revient à écrire un nouveau visiteur sans modifier les classes de formes.\\
-L'inversion de dépendances apparaît lorsque le contrôle et la fabrique s'appuient sur des abstractions (\texttt{EditorCommand}, \texttt{Validator}, \texttt{Drawable}) plutôt que sur des implémentations figées.\\\\
-
-Par manque de temps, \texttt{XmlLoader} et le \texttt{Builder} sont instanciés directement dans certaines commandes. Une possible évolution serait d'injecter une abstraction dédiée au chargement (par exemple un service \texttt{DrawingImporter}) afin d'améliorer le découplage. À défaut, un \texttt{EditorContext} pourrait au moins centraliser les dépendances partagées des commandes.\\\\
+Le principe SRP (Single Responsibility Principle) se voit par le fait que chaque classe a une unique responsabilité et est entièrement encapsulée.\\
+Le principe OCP (Open/Close Principle) se retrouve notamment via le Visiteur et le Composite puisqu'ajouter une opération sur les formes (export, affichage) revient à écrire un nouveau visiteur sans modifier les classes de formes.\\
+Le principe LSP (Liskov Substitution Principle) se retrouve via l’interface Drawable. Toute forme (Line, Rectangle, Circle, Ellipse) ainsi que le composite Group sont interchangeables. Le code client (save, parcours de l’historique, visiteurs) appelle uniquement accept(visitor) sans distinguer feuille et groupe.\\
+Le principe ISP (Interface Segregation Principle) apparaît par des interfaces spécialisées : Drawable, DrawingVisitor, EditorCommand, Validator, DrawingBuilder. \\
+Le principe DIP (Dependency Inversion Principle) se voit dans l’injection des abstractions. Les commandes et la vue dépendent de Drawable, DrawingVisitor, DrawingBuilder et Validator, tandis que les implémentations concrètes (XmlSaver, NormalDrawingBuilder, formes géométriques) sont fournies au niveau de l’assemblage (EditMain).\\
 
 \newpage
 

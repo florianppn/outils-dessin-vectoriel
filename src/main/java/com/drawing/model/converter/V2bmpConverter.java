@@ -1,6 +1,6 @@
-package com.drawing.controller.converter;
+package com.drawing.model.converter;
 
-import com.drawing.controller.xml.XmlLoader;
+import com.drawing.model.xml.XmlLoader;
 import com.drawing.model.builder.NormalDrawingBuilder;
 import com.drawing.model.shape.Circle;
 import com.drawing.model.shape.Line;
@@ -9,7 +9,6 @@ import com.drawing.model.shape.DrawingVisitor;
 import com.drawing.model.shape.Drawable;
 import com.drawing.model.shape.Ellipse;
 import com.drawing.model.shape.Group;
-
 
 import javax.imageio.ImageIO;
 import java.awt.*;

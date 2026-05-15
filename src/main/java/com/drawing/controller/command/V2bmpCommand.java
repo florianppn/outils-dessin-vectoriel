@@ -1,6 +1,6 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.converter.V2bmpConverter;
+import com.drawing.model.converter.V2bmpConverter;
 import com.drawing.controller.validation.Validator;
 
 /**

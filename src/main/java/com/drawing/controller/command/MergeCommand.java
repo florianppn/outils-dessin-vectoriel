@@ -1,7 +1,7 @@
 package com.drawing.controller.command;
 
-import com.drawing.controller.xml.XmlLoader;
-import com.drawing.controller.xml.XmlSaver;
+import com.drawing.model.xml.XmlLoader;
+import com.drawing.model.xml.XmlSaver;
 import com.drawing.model.builder.DrawingBuilder;
 import com.drawing.model.shape.Drawable;
 import com.drawing.model.shape.Group;

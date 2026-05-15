@@ -1,4 +1,4 @@
-package com.drawing.controller.xml;
+package com.drawing.model.xml;
 
 import com.drawing.util.ColorDecode;
 import com.drawing.model.shape.*;

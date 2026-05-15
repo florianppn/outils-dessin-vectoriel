@@ -3,7 +3,7 @@ package com.drawing;
 import com.drawing.controller.Editor;
 import com.drawing.controller.command.MergeCommand;
 import com.drawing.controller.validation.ArityValidator;
-import com.drawing.controller.xml.XmlLoader;
+import com.drawing.model.xml.XmlLoader;
 import com.drawing.model.builder.DrawingBuilder;
 import com.drawing.model.builder.NormalDrawingBuilder;
 
