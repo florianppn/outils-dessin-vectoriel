@@ -45,6 +45,12 @@ public class MergeCommand implements EditorCommand {
         }
     }
 
+    /**
+     * Charge les dessins à partir d'un fichier XML.
+     * @param fileName Le nom du fichier XML à charger.
+     * @return Une liste de Drawable représentant les formes chargées.
+     * @throws Exception Si une erreur survient lors du chargement du fichier XML.
+     */
     private List<Drawable> loadDrawables(String fileName) throws Exception {
         loader.load(fileName);
         return builder.getResult();

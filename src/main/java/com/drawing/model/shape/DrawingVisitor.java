@@ -20,7 +20,7 @@ public interface DrawingVisitor {
     /** @param ellipse ellipse à traiter */
     void visit(Ellipse ellipse);
 
-    /** @param group groupe (composite) à traiter ; implémentations typiques parcourent les enfants */
+    /** @param group groupe (composite) à traiter */
     void visit(Group group);
 
 }

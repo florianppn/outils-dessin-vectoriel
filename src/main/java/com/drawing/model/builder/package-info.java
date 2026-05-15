@@ -1,5 +1,5 @@
 /**
- * Contient les différents builder permettant de construire des dessins.
+ * Contient les classes permettant de construire les éléments du dessin à partir d'une description textuelle.
  *
  * @author Florian Pépin
  * @version 1.0

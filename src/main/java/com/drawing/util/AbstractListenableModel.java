@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * Base pour un modèle observable : liste d'observateurs et {@link #fireChange()}.
+ * Représente un modèle de données qui peut être écouté par des observateurs.
+ * Les classes qui étendent cette classe peuvent appeler {@link #fireChange()} pour notifier tous les observateurs enregistrés.
  *
  * @author Florian Pépin
  * @version 1.0
@@ -18,6 +19,7 @@ public abstract class AbstractListenableModel implements ListenableModel {
     }
     
     /**
+     * Ajoute un observateur à la liste des observateurs à notifier.
      * @param m observateur notifié après chaque {@link #fireChange()}
      */
     @Override
@@ -26,14 +28,17 @@ public abstract class AbstractListenableModel implements ListenableModel {
     }
 
     /**
-     * @param m observateur à retirer ; sans effet s'il n'était pas enregistré
+     * Retire un observateur de la liste des observateurs à notifier.
+     * @param m observateur à retirer
      */
     @Override
     public void removeModelListener(ModelListener m) {
         this.observers.remove(m);
     }
 
-    /** Notifie tous les observateurs enregistrés. */
+    /**
+     * Notifie tous les observateurs enregistrés.
+     */
     protected void fireChange() {
         for (ModelListener m : this.observers) {
             m.updatedModel(this);

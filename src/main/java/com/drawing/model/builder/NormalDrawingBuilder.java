@@ -39,12 +39,19 @@ public class NormalDrawingBuilder implements DrawingBuilder {
         groupStack.push(new ArrayList<>());
     }
 
+    /**
+     * Vérifie qu'aucune forme n'est en cours de construction, sinon lève une exception.
+     */
     private void ensureNoShapeInProgress() {
         if (currentKind != ShapeKind.NONE) {
             throw new IllegalStateException("Forme en cours de construction : " + currentKind);
         }
     }
 
+    /**
+     * Vérifie que la méthode est appelée dans le contexte d'une forme autorisée.
+     * @param allowed les types de formes pour lesquels la méthode est valide
+     */
     private void require(ShapeKind... allowed) {
         for (ShapeKind kind : allowed) {
             if (kind == currentKind) return;

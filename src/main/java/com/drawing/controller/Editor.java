@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 /**
- * Classe principale du contrôleur : elle gère la boucle de lecture et l'exécution des commandes.
+ * Classe principale du contrôleur : elle gère l'exécution des commandes.
  *
  * @author Florian Pépin
  * @version 1.0
@@ -59,8 +59,7 @@ public class Editor {
      * Enregistre une commande : à l'exécution, le validateur est appliqué puis la fabrique crée la commande.
      *
      * @param verb mot-clé saisi en première position sur la ligne
-     * @param validator chaîne ou validateur unique pour les arguments
-     * @param creator création de la commande après validation
+     * @param command instance de la commande à exécuter lorsque le verbe est saisi
      */
     public void register(String verb, EditorCommand command) {
         commands.put(verb, command);

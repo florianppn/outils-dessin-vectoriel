@@ -73,13 +73,15 @@ public class GraphicViewer extends JFrame implements DrawingVisitor, ModelListen
         setVisible(true);
     }
 
-    /** Demande la fermeture de la fenêtre principale. */
+    /** 
+     * Demande la fermeture de la fenêtre principale.
+     */
     public void quit() {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
     /**
-     * Dessine une ligne sur le contexte graphique courant (appelé uniquement pendant {@code paintComponent}).
+     * Dessine une ligne sur le contexte graphique courant.
      *
      * @param line segment à tracer
      */
@@ -106,7 +108,7 @@ public class GraphicViewer extends JFrame implements DrawingVisitor, ModelListen
     }
 
     /**
-     * Dessine un cercle (ellipse inscrite) sur le contexte graphique courant.
+     * Dessine un cercle sur le contexte graphique courant.
      *
      * @param circle cercle à tracer
      */
@@ -149,11 +151,7 @@ public class GraphicViewer extends JFrame implements DrawingVisitor, ModelListen
         }
     }
 
-    /**
-     * Invoqué lorsque le modèle notifie un changement : reprogramme le dessin du canvas.
-     *
-     * @param source instance du modèle ayant changé (typiquement le {@link DrawingModel} lié à cette vue)
-     */
+    /** {@inheritDoc} */
     @Override
     public void updatedModel(Object source) {
         canvas.repaint();

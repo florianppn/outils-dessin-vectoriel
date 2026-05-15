@@ -15,7 +15,7 @@ import org.w3c.dom.Element;
 import java.io.File;
 
 /**
- * Visiteur qui construit un arbre DOM XML à partir des {@link Drawable} du modèle.
+ * Représente un visiteur qui construit un document XML à partir d'une hiérarchie de formes dessinables.
  *
  * @author Florian Pépin
  * @version 1.0

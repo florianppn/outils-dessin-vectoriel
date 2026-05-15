@@ -131,7 +131,9 @@ public class DrawingModel extends AbstractListenableModel {
         return false;
     }
 
-    /** Vide l'historique et notifie les observateurs. */
+    /**
+     * Vide l'historique et notifie les observateurs.
+     */
     public void reset() {
         drawables.clear();
         fireChange();

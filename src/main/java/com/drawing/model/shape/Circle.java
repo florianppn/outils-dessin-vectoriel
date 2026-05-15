@@ -28,27 +28,37 @@ public class Circle implements Drawable {
         this.c = c;
     }
 
-    /** @return abscisse du centre */
+    /**
+     * @return abscisse du centre
+     */
     public double getCx() {
         return cx;
     }
 
-    /** @return ordonnée du centre */
+    /**
+     * @return ordonnée du centre
+     */
     public double getCy() {
         return cy;
     }
 
-    /** @return rayon */
+    /**
+     * @return rayon
+     */
     public double getRad() {
         return rad;
     }
 
-    /** @return couleur du contour */
+    /**
+     * @return couleur du contour
+     */
     public Color getColor() {
         return c;
     }
 
-    /** @return rayon (alias de {@link #getRad()}) */
+    /**
+     * @return rayon (alias de {@link #getRad()})
+     */
     public double getRadius() {
         return rad;
     }

@@ -11,7 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 
 /**
- * Lit un fichier XML de dessin et délègue la construction des formes à un builder (Director).
+ * Charge un dessin à partir d'un fichier XML et utilise un DrawingBuilder pour construire le modèle.
  *
  * @author Florian Pépin
  * @version 1.0
@@ -42,6 +42,11 @@ public class XmlLoader {
         parseChildren(root);
     }
 
+    /**
+     * Parse les éléments enfants d'un élément donné et ajoute les formes au modèle.
+     *
+     * @param parent élément parent dont les enfants doivent être parsés
+     */
     private void parseChildren(Element parent) {
         NodeList children = parent.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
@@ -59,6 +64,10 @@ public class XmlLoader {
         }
     }
 
+    /**
+     * Parse un élément <rect> et ajoute un rectangle au modèle.
+     * @param e élément <rect> à parser
+     */
     private void parseRect(Element e) {
         drawingBuilder.beginRectangle();
         drawingBuilder.setX0(Double.parseDouble(e.getAttribute("x0")));
@@ -69,6 +78,10 @@ public class XmlLoader {
         drawingBuilder.build();
     }
 
+    /**
+     * Parse un élément <circ> et ajoute un cercle au modèle.
+     * @param e élément <circ> à parser
+     */
     private void parseCircle(Element e) {
         drawingBuilder.beginCircle();
         drawingBuilder.setCx(Double.parseDouble(e.getAttribute("cx")));
@@ -78,6 +91,10 @@ public class XmlLoader {
         drawingBuilder.build();
     }
 
+    /**
+     * Parse un élément <line> et ajoute une ligne au modèle.
+     * @param e élément <line> à parser
+     */
     private void parseLine(Element e) {
         drawingBuilder.beginLine();
         drawingBuilder.setX0(Double.parseDouble(e.getAttribute("x0")));
@@ -88,6 +105,10 @@ public class XmlLoader {
         drawingBuilder.build();
     }
 
+    /**
+     * Parse un élément <elli> et ajoute une ellipse au modèle.
+     * @param e élément <elli> à parser
+     */
     private void parseEllipse(Element e) {
         drawingBuilder.beginEllipse();
         drawingBuilder.setCenterX(Double.parseDouble(e.getAttribute("x")));
@@ -98,6 +119,10 @@ public class XmlLoader {
         drawingBuilder.build();
     }
 
+    /**
+     * Parse un élément <group> et ajoute un groupe au modèle. Les éléments enfants du groupe sont également parsés.
+     * @param groupEl élément <group> à parser
+     */
     private void parseGroup(Element groupEl) {
         String label = groupEl.getAttribute("label");
         drawingBuilder.startGroup();

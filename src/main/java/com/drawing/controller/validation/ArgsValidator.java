@@ -17,6 +17,7 @@ public abstract class ArgsValidator implements Validator {
         this.next = next;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setNext(Validator next) {
         this.next = next;

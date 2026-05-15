@@ -33,12 +33,17 @@ public class ColorDecode {
         return c;
     }
 
-    /** @return {@code true} si le nom est une couleur connue */
+    /**
+     * Vérifie si le nom correspond à une couleur connue.
+     * @param name nom anglais de la couleur (insensible à la casse)
+     * @return {@code true} si le nom est une couleur connue
+     */
     public static boolean isValid(String name) {
         return COLORS.containsKey(name.toLowerCase());
     }
 
     /**
+     * Récupère le nom de la couleur à partir de l'instance {@link Color}.
      * @param color couleur du modèle
      * @return nom enregistré pour cette couleur
      * @throws InvalidArgException si aucune entrée ne correspond

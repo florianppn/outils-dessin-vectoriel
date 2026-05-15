@@ -1,5 +1,5 @@
 /**
- * Sérialisation et désérialisation du modèle au format XML (.vec).
+ * Représente la sérialisation et désérialisation du modèle au format XML (.vec).
  *
  * @author Florian Pépin
  * @version 1.0

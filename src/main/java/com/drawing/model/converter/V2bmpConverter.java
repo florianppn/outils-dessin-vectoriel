@@ -28,6 +28,12 @@ public class V2bmpConverter implements DrawingVisitor {
     private static final int CANVAS_HEIGHT = 600;
     private Graphics2D g;
 
+    /**
+     * Convertit un fichier de dessin vectoriel en image PNG.
+     * @param vecFile chemin du fichier de dessin vectoriel à convertir
+     * @param pngFile chemin du fichier PNG de sortie
+     * @throws Exception en cas d'erreur de lecture du fichier vectoriel ou d'écriture du fichier PNG
+     */
     public void convert(String vecFile, String pngFile) throws Exception {
         NormalDrawingBuilder builder = new NormalDrawingBuilder();
         new XmlLoader(builder).load(vecFile);
@@ -51,6 +57,7 @@ public class V2bmpConverter implements DrawingVisitor {
         ImageIO.write(image, "png", new File(pngFile));
     }
 
+    /** {@inheritDoc} */
     @Override
     public void visit(Line line) {
         g.setColor(line.getColor());
@@ -61,6 +68,7 @@ public class V2bmpConverter implements DrawingVisitor {
         );
     }
 
+    /** {@inheritDoc} */
     @Override
     public void visit(Rectangle rectangle) {
         g.setColor(rectangle.getColor());
@@ -71,6 +79,7 @@ public class V2bmpConverter implements DrawingVisitor {
         g.drawRect(x0, y0, w, h);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void visit(Circle circle) {
         g.setColor(circle.getColor());
@@ -81,6 +90,7 @@ public class V2bmpConverter implements DrawingVisitor {
         g.drawOval(x, y, d, d);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void visit(Ellipse ellipse) {
         g.setColor(ellipse.getColor());
@@ -91,6 +101,7 @@ public class V2bmpConverter implements DrawingVisitor {
         g.drawOval(x, y, w, h);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void visit(Group group) {
         for (Drawable d : group.getDrawables()) {
