@@ -10,13 +10,11 @@ import com.drawing.model.shape.Line;
 import com.drawing.model.shape.Rectangle;
 import com.drawing.util.ModelListener;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.WindowEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -29,28 +27,12 @@ import java.awt.geom.Rectangle2D;
  * @author Florian Pépin
  * @version 1.0
  */
-public class GraphicViewer extends JFrame implements DrawingVisitor, ModelListener {
+public class GraphicViewer extends JPanel implements DrawingVisitor, ModelListener {
 
-    private int width = 800;
-    private int height = 600;
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 600;
     private DrawingModel model;
-    /** Non nul uniquement pendant le peint du canvas (double dispatch du visitor). */
     private Graphics2D g2;
-
-    private JPanel canvas = new JPanel() {
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            try {
-                g2 = (Graphics2D) g;
-                for (Drawable d : model.getDrawables()) {
-                    d.accept(GraphicViewer.this);
-                }
-            } finally {
-                g2 = null;
-            }
-        }
-    };
 
     /**
      * Ouvre la fenêtre et s'abonne aux changements du modèle.
@@ -60,24 +42,21 @@ public class GraphicViewer extends JFrame implements DrawingVisitor, ModelListen
     public GraphicViewer(DrawingModel model) {
         this.model = model;
         this.model.addModelListener(this);
-
-        setTitle("Editeur de dessin vectoriel");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        canvas.setBackground(Color.WHITE);
-        canvas.setPreferredSize(new Dimension(width, height));
-        setContentPane(canvas);
-
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
+        this.setBackground(Color.WHITE);
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
     }
 
-    /** 
-     * Demande la fermeture de la fenêtre principale.
-     */
-    public void quit() {
-        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        try {
+            g2 = (Graphics2D) g;
+            for (Drawable d : model.getDrawables()) {
+                d.accept(GraphicViewer.this);
+            }
+        } finally {
+            g2 = null;
+        }
     }
 
     /**
@@ -154,7 +133,7 @@ public class GraphicViewer extends JFrame implements DrawingVisitor, ModelListen
     /** {@inheritDoc} */
     @Override
     public void updatedModel(Object source) {
-        canvas.repaint();
+        this.repaint();
     }
 
 }

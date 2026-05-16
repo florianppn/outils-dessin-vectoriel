@@ -6,7 +6,7 @@ import com.drawing.controller.validation.*;
 import com.drawing.model.xml.*;
 import com.drawing.model.DrawingModel;
 import com.drawing.model.builder.*;
-import com.drawing.view.GraphicViewer;
+import com.drawing.view.*;
 
 /**
  * Point d'entrée.
@@ -42,7 +42,7 @@ public class EditMain {
         editor.register("list", new ListCommand(model, new ArityValidator(0)));
         editor.register("quit", new QuitCommand(new ArityValidator(0)));
 
-        new GraphicViewer(model);
+        new GUI(new GraphicViewer(model));
         editor.run();
     }
     
