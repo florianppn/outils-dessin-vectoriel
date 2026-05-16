@@ -20,7 +20,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 /**
- * Fenêtre Swing affichant le dessin : implémente {@link DrawingVisitor} pour tracer
+ * Vue Swing affichant le dessin : implémente {@link DrawingVisitor} pour tracer
  * directement dans {@code paintComponent}, et {@link ModelListener} pour se rafraîchir
  * quand le {@link DrawingModel} change.
  *

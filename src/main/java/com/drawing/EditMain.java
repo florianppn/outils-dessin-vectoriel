@@ -42,7 +42,7 @@ public class EditMain {
         editor.register("list", new ListCommand(model, new ArityValidator(0)));
         editor.register("quit", new QuitCommand(new ArityValidator(0)));
 
-        new GUI(new GraphicViewer(model));
+        new GUI("Editeur de dessin vectoriel", new GraphicViewer(model));
         editor.run();
     }
     
