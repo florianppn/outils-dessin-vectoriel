@@ -73,6 +73,10 @@ Une fois l'application lancée, vous pouvez saisir les commandes suivantes dans 
 
 - `merge A.vec B.vec fusion.vec` : fusionne le fichier `A.vec` avec le fichier `B.vec` sous le nom de `fusion.vec`.
 
+- `quit` : termine le programme et rend la main au système.
+
 ### Editeur de conversion en image matricielle
 
 - `v2bmp in.vec out.png` : convertis le fichier `in.vec` en fichier `out.png`.
+
+- `quit` : termine le programme et rend la main au système.
