@@ -46,32 +46,39 @@ Le rapport du projet se trouve dans `doc/rapport.pdf`.
 Une fois l'application lancée, vous pouvez saisir les commandes suivantes dans la console.
 
 ### Éditeur Principal
-Permet de créer, grouper et manipuler des formes. Les couleurs peuvent être saisies par nom (ex: `red`, `blue`).
 
-*   **Formes géométriques :**
-    *   `rect <x> <y> <largeur> <hauteur> <couleur>` : Ajoute un rectangle.
-    *   `circ <cx> <cy> <rayon> <couleur>` : Ajoute un cercle.
-    *   `line <x1> <y1> <x2> <y2> <couleur>` : Ajoute une ligne.
-    *   `elli <cx> <cy> <rx> <ry> <couleur>` : Ajoute une ellipse.
-*   **Groupement :**
-    *   `grp <id1> <id2> ...` : Groupe au moins deux formes par leur index.
-    *   `ugrp <id>` : Dégroupe une forme composite.
-*   **Gestion du dessin :**
-    *   `list` : Affiche la liste des formes présentes et leurs index.
-    *   `new` : Efface le dessin actuel.
-    *   `load <fichier.xml>` : Charge un dessin depuis un fichier.
-    *   `save <fichier.xml>` : Sauvegarde le dessin actuel.
-*   **Système :**
-    *   `quit` : Quitte l'application.
+- `new` : initialise un nouveau dessin. Si un dessin était chargé ou en cours de création, il est abandonné.
+
+- `load fichier.vec` : abandonne le dessin en cours et charge le dessin contenu dans le fichier `fichier.vec`.
+
+- `save fichier.vec` : sauvegarde le contenu du dessin en cours dans le fichier `fichier.vec`.
+
+- `line x y x' y' col` : créé une ligne entre les points (x,y) et (x',y') avec la couleur `col`. Par exemple :
+> `line 10 5 42 23 blue`
+
+- `rect x y x' y' col` : créé un rectangle entre les points (x,y) et (x',y') avec la couleur `col`.
+
+- `circ x y r col` : créé un cercle de centre (x,y) et de rayon `r` avec la couleur `col`.
+
+- `elli x y rx ry col` : créé une ellipse de centre (x,y), de rayon horizontal `rx`, de rayon vertical `ry` avec la couleur `col`.
+
+- `list` : liste en les numérotant les formes composant le dessins. Par exemple :
+> `list`
+> 1 line 10 5 42 23 blue
+> 2 group [la belle maison]
+> 3 rectangle 12 34 56 78 red
+> 4 group [le soleil]
+
+- `grp label r1 r2 ...` : créé un groupe avec le nom `label` et y place les éléments de dessin de rang `r1 r2 ...` . Le rang d’un élément est obtenu avec la commande `list`.
+
+- `ugrp r` : défait le groupe de rang `r`. Pour cela, les éléments qui le composent sont déplacés à la racine du dessin et le groupe est supprimé.
+
+- `quit` : termine le programme et rend la main au système.
 
 ### Editeur de fusion
-Outil spécialisé pour combiner deux fichiers de dessin.
 
-*   `merge <fichier1.xml> <fichier2.xml> <sortie.xml>` : Fusionne les deux fichiers sources dans un nouveau fichier de sortie.
-*   `quit` : Quitte l'application.
+- `merge A.vec B.vec fusion.vec` : fusionne le fichier A.vec avec le fichier B.vec en fusion.vec.
 
-### Editeur de conversion
-Outil de rendu pour transformer vos dessins vectoriels en images.
+### Editeur de conversion en image matricielle
 
-*   `v2bmp <entrée.xml> <sortie.bmp>` : Convertit un fichier XML de dessin en image bitmap.
-*   `quit` : Quitte l'application.
+- `v2bmp in.vec out.png` : convertis le fichier in.vec en image out.png.
