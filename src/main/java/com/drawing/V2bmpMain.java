@@ -21,6 +21,7 @@ public class V2bmpMain {
         Editor editor = new Editor("Bienvenue sur l'editeur de conversion !");
 
         editor.register("v2bmp", new V2bmpCommand(converter, new ArityValidator(2)));
+        editor.register("quit", new QuitCommand(new ArityValidator(0)));
 
         editor.run();
     }

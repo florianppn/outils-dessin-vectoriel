@@ -24,6 +24,7 @@ public class MergeMain {
         XmlLoader loader = new XmlLoader(builder);
 
         editor.register("merge", new MergeCommand(builder, loader, new ArityValidator(3)));
+        editor.register("quit", new QuitCommand(new ArityValidator(0)));
         
         editor.run();
     }
