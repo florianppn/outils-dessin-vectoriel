@@ -45,8 +45,8 @@ Le rapport du projet se trouve dans `doc/rapport.pdf`.
 
 Une fois l'application lancée, vous pouvez saisir les commandes suivantes dans la console.
 
-### 🎨 Éditeur Principal (`Edit`)
-Permet de créer, grouper et manipuler des formes. Les couleurs peuvent être saisies par nom (ex: `red`, `blue`) ou code hexa (ex: `#FF0000`).
+### Éditeur Principal
+Permet de créer, grouper et manipuler des formes. Les couleurs peuvent être saisies par nom (ex: `red`, `blue`).
 
 *   **Formes géométriques :**
     *   `rect <x> <y> <largeur> <hauteur> <couleur>` : Ajoute un rectangle.
@@ -64,13 +64,13 @@ Permet de créer, grouper et manipuler des formes. Les couleurs peuvent être sa
 *   **Système :**
     *   `quit` : Quitte l'application.
 
-### 🔄 Fusion (`Merge`)
+### Editeur de fusion
 Outil spécialisé pour combiner deux fichiers de dessin.
 
 *   `merge <fichier1.xml> <fichier2.xml> <sortie.xml>` : Fusionne les deux fichiers sources dans un nouveau fichier de sortie.
 *   `quit` : Quitte l'application.
 
-### 🖼️ Conversion (`V2bmp`)
+### Editeur de conversion
 Outil de rendu pour transformer vos dessins vectoriels en images.
 
 *   `v2bmp <entrée.xml> <sortie.bmp>` : Convertit un fichier XML de dessin en image bitmap.
