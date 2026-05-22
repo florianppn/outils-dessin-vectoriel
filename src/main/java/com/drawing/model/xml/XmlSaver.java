@@ -45,7 +45,7 @@ public class XmlSaver implements DrawingVisitor {
      * @param r rectangle à sérialiser sous la forme {@code <rect .../>}
      */
     @Override
-    public void visit(Rectangle r) {
+    public void visitRect(Rectangle r) {
         Element e = doc.createElement("rect");
         e.setAttribute("x0", String.valueOf(r.getX0()));
         e.setAttribute("y0", String.valueOf(r.getY0()));
@@ -59,7 +59,7 @@ public class XmlSaver implements DrawingVisitor {
      * @param c cercle à sérialiser sous la forme {@code <circ .../>}
      */
     @Override
-    public void visit(Circle c) {
+    public void visitCirc(Circle c) {
         Element e = doc.createElement("circ");
         e.setAttribute("cx", String.valueOf(c.getCx()));
         e.setAttribute("cy", String.valueOf(c.getCy()));
@@ -72,7 +72,7 @@ public class XmlSaver implements DrawingVisitor {
      * @param l ligne à sérialiser sous la forme {@code <line .../>}
      */
     @Override
-    public void visit(Line l) {
+    public void visitLine(Line l) {
         Element e = doc.createElement("line");
         e.setAttribute("x0", String.valueOf(l.getX0()));
         e.setAttribute("y0", String.valueOf(l.getY0()));
@@ -86,7 +86,7 @@ public class XmlSaver implements DrawingVisitor {
      * @param ell ellipse à sérialiser sous la forme {@code <elli .../>}
      */
     @Override
-    public void visit(Ellipse ell) {
+    public void visitElli(Ellipse ell) {
         Element e = doc.createElement("elli");
         e.setAttribute("x", String.valueOf(ell.getX()));
         e.setAttribute("y", String.valueOf(ell.getY()));
@@ -100,7 +100,7 @@ public class XmlSaver implements DrawingVisitor {
      * @param g groupe à sérialiser ; les enfants sont imbriqués sous {@code <group>}.
      */
     @Override
-    public void visit(Group g) {
+    public void visitGroup(Group g) {
         Element groupEl = doc.createElement("group");
         groupEl.setAttribute("label", g.getName());
         current.appendChild(groupEl);

@@ -59,7 +59,7 @@ public class V2bmpConverter implements DrawingVisitor {
 
     /** {@inheritDoc} */
     @Override
-    public void visit(Line line) {
+    public void visitLine(Line line) {
         g.setColor(line.getColor());
         g.drawLine((int) Math.round(line.getX0()),
                 (int) Math.round(line.getY0()),
@@ -70,7 +70,7 @@ public class V2bmpConverter implements DrawingVisitor {
 
     /** {@inheritDoc} */
     @Override
-    public void visit(Rectangle rectangle) {
+    public void visitRect(Rectangle rectangle) {
         g.setColor(rectangle.getColor());
         int x0 = (int) Math.round(Math.min(rectangle.getX0(), rectangle.getX1()));
         int y0 = (int) Math.round(Math.min(rectangle.getY0(), rectangle.getY1()));
@@ -81,7 +81,7 @@ public class V2bmpConverter implements DrawingVisitor {
 
     /** {@inheritDoc} */
     @Override
-    public void visit(Circle circle) {
+    public void visitCirc(Circle circle) {
         g.setColor(circle.getColor());
         double r = circle.getRad();
         int x = (int) Math.round(circle.getCx() - r);
@@ -92,7 +92,7 @@ public class V2bmpConverter implements DrawingVisitor {
 
     /** {@inheritDoc} */
     @Override
-    public void visit(Ellipse ellipse) {
+    public void visitElli(Ellipse ellipse) {
         g.setColor(ellipse.getColor());
         int x = (int) Math.round(ellipse.getX() - ellipse.getRx());
         int y = (int) Math.round(ellipse.getY() - ellipse.getRy());
@@ -103,7 +103,7 @@ public class V2bmpConverter implements DrawingVisitor {
 
     /** {@inheritDoc} */
     @Override
-    public void visit(Group group) {
+    public void visitGroup(Group group) {
         for (Drawable d : group.getDrawables()) {
             d.accept(this);
         }

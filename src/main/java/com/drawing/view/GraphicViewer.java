@@ -65,7 +65,7 @@ public class GraphicViewer extends JPanel implements DrawingVisitor, ModelListen
      * @param line segment à tracer
      */
     @Override
-    public void visit(Line line) {
+    public void visitLine(Line line) {
         g2.setColor(line.getColor());
         g2.draw(new Line2D.Double(line.getX0(), line.getY0(), line.getX1(), line.getY1()));
     }
@@ -76,7 +76,7 @@ public class GraphicViewer extends JPanel implements DrawingVisitor, ModelListen
      * @param rectangle rectangle à tracer
      */
     @Override
-    public void visit(Rectangle rectangle) {
+    public void visitRect(Rectangle rectangle) {
         g2.setColor(rectangle.getColor());
         g2.draw(new Rectangle2D.Double(
                 rectangle.getX0(),
@@ -92,7 +92,7 @@ public class GraphicViewer extends JPanel implements DrawingVisitor, ModelListen
      * @param circle cercle à tracer
      */
     @Override
-    public void visit(Circle circle) {
+    public void visitCirc(Circle circle) {
         g2.setColor(circle.getColor());
         g2.draw(new Ellipse2D.Double(
                 circle.getCx() - circle.getRad(),
@@ -108,7 +108,7 @@ public class GraphicViewer extends JPanel implements DrawingVisitor, ModelListen
      * @param ellipse ellipse à tracer
      */
     @Override
-    public void visit(Ellipse ellipse) {
+    public void visitElli(Ellipse ellipse) {
         g2.setColor(ellipse.getColor());
         g2.draw(new Ellipse2D.Double(
                 ellipse.getX() - ellipse.getRx(),
@@ -124,7 +124,7 @@ public class GraphicViewer extends JPanel implements DrawingVisitor, ModelListen
      * @param group nœud composite
      */
     @Override
-    public void visit(Group group) {
+    public void visitGroup(Group group) {
         for (Drawable d : group.getDrawables()) {
             d.accept(this);
         }

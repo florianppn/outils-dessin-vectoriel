@@ -36,8 +36,8 @@ public class MergeCommand implements EditorCommand {
             saver.reset();
             Group a = new Group(loadDrawables(params[0]), "a");
             Group b = new Group(loadDrawables(params[1]), "b");
-            saver.visit(a);
-            saver.visit(b);
+            saver.visitGroup(a);
+            saver.visitGroup(b);
             saver.save(params[2]);
             return "La fusion est terminée.";
         } catch (Exception e) {

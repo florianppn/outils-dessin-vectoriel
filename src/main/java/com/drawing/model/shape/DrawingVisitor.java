@@ -9,18 +9,18 @@ package com.drawing.model.shape;
 public interface DrawingVisitor {
 
     /** @param line segment à traiter */
-    void visit(Line line);
+    void visitLine(Line line);
 
     /** @param rectangle rectangle à traiter */
-    void visit(Rectangle rectangle);
+    void visitRect(Rectangle rectangle);
 
     /** @param circle cercle à traiter */
-    void visit(Circle circle);
+    void visitCirc(Circle circle);
 
     /** @param ellipse ellipse à traiter */
-    void visit(Ellipse ellipse);
+    void visitElli(Ellipse ellipse);
 
     /** @param group groupe (composite) à traiter */
-    void visit(Group group);
+    void visitGroup(Group group);
 
 }

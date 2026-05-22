@@ -77,7 +77,7 @@ public class Group implements Drawable {
     /** {@inheritDoc} */
     @Override
     public void accept(DrawingVisitor visitor) {
-        visitor.visit(this);
+        visitor.visitGroup(this);
     }
 
     /**

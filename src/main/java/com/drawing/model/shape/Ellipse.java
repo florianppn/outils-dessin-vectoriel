@@ -58,7 +58,7 @@ public class Ellipse implements Drawable {
     /** {@inheritDoc} */
     @Override
     public void accept(DrawingVisitor visitor) {
-        visitor.visit(this);
+        visitor.visitElli(this);
     }
 
     /**
