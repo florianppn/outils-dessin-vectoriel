@@ -53,8 +53,7 @@ Une fois l'application lancée, vous pouvez saisir les commandes suivantes dans 
 
 - `save fichier.vec` : sauvegarde le contenu du dessin en cours dans le fichier `fichier.vec`.
 
-- `line x y x' y' col` : créé une ligne entre les points (x,y) et (x',y') avec la couleur `col`. Par exemple :
-> `line 10 5 42 23 blue`
+- `line x y x' y' col` : créé une ligne entre les points (x,y) et (x',y') avec la couleur `col`.
 
 - `rect x y x' y' col` : créé un rectangle entre les points (x,y) et (x',y') avec la couleur `col`.
 
@@ -62,12 +61,7 @@ Une fois l'application lancée, vous pouvez saisir les commandes suivantes dans 
 
 - `elli x y rx ry col` : créé une ellipse de centre (x,y), de rayon horizontal `rx`, de rayon vertical `ry` avec la couleur `col`.
 
-- `list` : liste en les numérotant les formes composant le dessins. Par exemple :
-> `list`
-> 1 line 10 5 42 23 blue
-> 2 group [la belle maison]
-> 3 rectangle 12 34 56 78 red
-> 4 group [le soleil]
+- `list` : liste en numérotant les formes composant le dessins.
 
 - `grp label r1 r2 ...` : créé un groupe avec le nom `label` et y place les éléments de dessin de rang `r1 r2 ...` . Le rang d’un élément est obtenu avec la commande `list`.
 
@@ -77,8 +71,8 @@ Une fois l'application lancée, vous pouvez saisir les commandes suivantes dans 
 
 ### Editeur de fusion
 
-- `merge A.vec B.vec fusion.vec` : fusionne le fichier A.vec avec le fichier B.vec en fusion.vec.
+- `merge A.vec B.vec fusion.vec` : fusionne le fichier `A.vec` avec le fichier `B.vec` sous le nom de `fusion.vec`.
 
 ### Editeur de conversion en image matricielle
 
-- `v2bmp in.vec out.png` : convertis le fichier in.vec en image out.png.
+- `v2bmp in.vec out.png` : convertis le fichier `in.vec` en fichier `out.png`.
