@@ -3,7 +3,7 @@ package com.drawing.view;
 import javax.swing.JFrame;
 
 /**
- * Interface Graphique
+ * Fenêtre principale de l'application, contenant un {@link GraphicViewer} pour afficher le dessin.
  * 
  * @author Florian Pépin
  * @version 1.0
