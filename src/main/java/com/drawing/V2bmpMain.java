@@ -1,7 +1,7 @@
 package com.drawing;
 
 import com.drawing.controller.Editor;
-import com.drawing.controller.command.V2bmpCommand;
+import com.drawing.controller.command.*;
 import com.drawing.model.converter.V2bmpConverter;
 import com.drawing.controller.validation.ArityValidator;
 
